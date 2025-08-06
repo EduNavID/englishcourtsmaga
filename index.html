@@ -3,197 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Sign Up - English Court SMAN 3 Lamongan</title>
+    <title>English Court - SMAN 3 Lamongan</title>
+    
+    <!-- Memuat Tailwind CSS untuk styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Memuat Library Supabase untuk koneksi ke database -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Memuat Google Fonts untuk tampilan teks yang lebih baik -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* Style dasar untuk body dan font */
         body {
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background: linear-gradient(to bottom right, #eff6ff, #dbeafe); 
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
         }
-        .page-container {
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        /* Menyembunyikan form yang tidak aktif */
+        .form-container.hidden {
+            display: none;
         }
-        .page-container.is-exiting {
-            opacity: 0;
-            transform: translateY(-10px);
+        /* Animasi sederhana untuk transisi form */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-container {
+            animation: fadeIn 0.5s ease-in-out;
         }
     </style>
 </head>
-<body class="text-slate-800">
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-12 w-12">
-                <div class="h-12 w-12 rounded-full border-2 border-dashed border-slate-400 flex items-center justify-center">
-                    <span class="text-xs font-semibold text-slate-500 text-center">EC Logo</span>
+    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden">
+        
+        <!-- Bagian Kiri: Branding & Gambar -->
+        <div class="w-full md:w-1/2 p-8 md:p-12 text-white bg-cover bg-center" style="background-image: linear-gradient(rgba(20, 30, 48, 0.7), rgba(36, 59, 85, 0.7)), url('https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop');">
+            <div class="flex items-center gap-4 mb-6">
+                <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-14 w-14 bg-white p-1 rounded-full">
+                <div class="h-14 w-14 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
+                    <span class="text-xs font-semibold text-white/80 text-center">EC Logo</span>
                 </div>
-                <span class="text-xl font-bold text-blue-700 hidden sm:block">English Court</span>
             </div>
-            <button id="nav-toggle-button" class="font-semibold text-blue-600 border border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors duration-300">
-                Sign Up
-            </button>
-        </nav>
-    </header>
-
-    <main class="container mx-auto px-6 py-12 flex items-center justify-center flex-grow">
-        <div id="signup-container" class="w-full max-w-md page-container hidden">
-            <div class="bg-white p-8 md:p-10 rounded-2xl shadow-2xl">
-                <h2 class="text-3xl font-extrabold text-center text-slate-900 mb-2">Create Account</h2>
-                <p class="text-center text-slate-500 mb-8">Daftar untuk menjadi anggota English Court.</p>
-                <form id="signup-form" class="space-y-4">
-                    <div>
-                        <label for="signup-email" class="block text-sm font-bold text-slate-700 mb-2">Email</label>
-                        <input type="email" id="signup-email" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
-                    </div>
-                    <div>
-                        <label for="signup-password" class="block text-sm font-bold text-slate-700 mb-2">Password</label>
-                        <input type="password" id="signup-password" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
-                    </div>
-                    <div id="signup-error" class="hidden text-red-500 text-sm text-center pt-1"></div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all text-lg shadow-lg hover:shadow-blue-200">
-                        Daftar
-                    </button>
-                </form>
-                <p class="text-center text-sm text-slate-500 mt-6">
-                    Sudah punya akun?
-                    <a href="#" id="switch-to-login-link" class="font-semibold text-blue-600 hover:underline">Login di sini</a>
-                </p>
-            </div>
+            <h1 class="text-4xl font-bold mb-3">English Court</h1>
+            <p class="text-lg font-light text-white/90">SMA Negeri 3 Lamongan</p>
+            <p class="mt-8 border-l-4 border-yellow-400 pl-4 text-white/90">
+                Welcome! Please log in or sign up to continue to your dashboard.
+            </p>
         </div>
 
-        <div id="login-container" class="w-full max-w-md page-container">
-            <div class="bg-white p-8 md:p-10 rounded-2xl shadow-2xl">
-                <h2 class="text-3xl font-extrabold text-center text-slate-900 mb-2">Welcome Back!</h2>
-                <p class="text-center text-slate-500 mb-8">Login untuk mengakses materi dan tugas Anda.</p>
-                <form id="login-form" class="space-y-6">
+        <!-- Bagian Kanan: Form Login & Sign Up -->
+        <div class="w-full md:w-1/2 p-8 md:p-12">
+
+            <!-- Container Form Login (Aktif secara default) -->
+            <div id="login-view" class="form-container">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Login</h2>
+                <p class="text-slate-500 mb-8">Selamat datang kembali!</p>
+                <form id="login-form" class="space-y-5">
                     <div>
-                        <label for="login-email" class="block text-sm font-bold text-slate-700 mb-2">Email</label>
-                        <input type="email" id="login-email" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                        <label for="login-email" class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+                        <input id="login-email" type="email" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="nama@email.com">
                     </div>
                     <div>
-                        <label for="login-password" class="block text-sm font-bold text-slate-700 mb-2">Password</label>
-                        <input type="password" id="login-password" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                        <label for="login-password" class="block text-sm font-medium text-slate-600 mb-1">Password</label>
+                        <input id="login-password" type="password" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="••••••••">
                     </div>
-                    <div id="login-error" class="hidden text-red-500 text-sm text-center pt-1"></div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all text-lg shadow-lg hover:shadow-blue-200">
-                        Login
-                    </button>
+                    <div id="login-error" class="hidden text-red-600 text-sm"></div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-300">Login</button>
                 </form>
                 <p class="text-center text-sm text-slate-500 mt-6">
                     Belum punya akun?
-                    <a href="#" id="switch-to-signup-link" class="font-semibold text-blue-600 hover:underline">Daftar di sini</a>
+                    <a href="#" id="show-signup-link" class="font-semibold text-blue-600 hover:underline">Daftar di sini</a>
                 </p>
             </div>
-        </div>
-    </main>
-    
-    <footer class="bg-white/80 backdrop-blur-lg mt-auto">
-        <div class="container mx-auto px-6 py-4 text-center text-slate-500">
-            &copy; 2025 English Court SMA Negeri 3 Lamongan.
-        </div>
-    </footer>
 
+            <!-- Container Form Sign Up (Tersembunyi secara default) -->
+            <div id="signup-view" class="form-container hidden">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Create Account</h2>
+                <p class="text-slate-500 mb-8">Buat akun baru untuk bergabung.</p>
+                <form id="signup-form" class="space-y-5">
+                    <div>
+                        <label for="signup-email" class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+                        <input id="signup-email" type="email" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="nama@email.com">
+                    </div>
+                    <div>
+                        <label for="signup-password" class="block text-sm font-medium text-slate-600 mb-1">Password</label>
+                        <input id="signup-password" type="password" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Minimal 6 karakter">
+                    </div>
+                    <div id="signup-error" class="hidden text-red-600 text-sm"></div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-300">Daftar</button>
+                </form>
+                <p class="text-center text-sm text-slate-500 mt-6">
+                    Sudah punya akun?
+                    <a href="#" id="show-login-link" class="font-semibold text-blue-600 hover:underline">Login di sini</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Utama untuk Fungsionalitas -->
     <script>
+        // Menunggu seluruh halaman HTML dimuat sebelum menjalankan script
         document.addEventListener('DOMContentLoaded', () => {
-            // Definisi elemen-elemen DOM
-            const signupContainer = document.getElementById('signup-container');
-            const loginContainer = document.getElementById('login-container');
-            const navToggleButton = document.getElementById('nav-toggle-button');
-            const signupForm = document.getElementById('signup-form');
-            const loginForm = document.getElementById('login-form');
-            const signupError = document.getElementById('signup-error');
-            const loginError = document.getElementById('login-error');
-            const switchToSignupLink = document.getElementById('switch-to-signup-link');
-            const switchToLoginLink = document.getElementById('switch-to-login-link');
-
-            // ==== PENGHUBUNG KE SUPABASE ====
+            
+            // Kunci dan URL untuk koneksi ke Supabase (sudah diisi)
             const SUPABASE_URL = 'https://jelcycdbdokcalsuptwm.supabase.co';
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ1NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
-            // ================================
-
+            
+            // Membuat koneksi ke Supabase
             const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            const showLogin = () => {
-                switchPage(loginContainer, signupContainer);
-                navToggleButton.textContent = 'Sign Up';
-            };
+            // Mengambil elemen-elemen dari HTML untuk dimanipulasi
+            const loginView = document.getElementById('login-view');
+            const signupView = document.getElementById('signup-view');
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const showSignupLink = document.getElementById('show-signup-link');
+            const showLoginLink = document.getElementById('show-login-link');
+            const loginErrorDiv = document.getElementById('login-error');
+            const signupErrorDiv = document.getElementById('signup-error');
 
-            const showSignUp = () => {
-                switchPage(signupContainer, loginContainer);
-                navToggleButton.textContent = 'Login';
-            };
+            // Fungsi untuk menampilkan form Sign Up dan menyembunyikan form Login
+            function showSignUp() {
+                loginView.classList.add('hidden');
+                signupView.classList.remove('hidden');
+            }
 
-            const switchPage = (pageToShow, pageToHide) => {
-                if (pageToHide) {
-                    pageToHide.classList.add('is-exiting');
-                    setTimeout(() => {
-                        pageToHide.classList.add('hidden');
-                        pageToHide.classList.remove('is-exiting');
-                        if (pageToShow) pageToShow.classList.remove('hidden');
-                    }, 300);
-                } else if (pageToShow) {
-                    pageToShow.classList.remove('hidden');
-                }
-            };
+            // Fungsi untuk menampilkan form Login dan menyembunyikan form Sign Up
+            function showLogin() {
+                signupView.classList.add('hidden');
+                loginView.classList.remove('hidden');
+            }
 
-            navToggleButton.addEventListener('click', () => {
-                const isLoginVisible = !loginContainer.classList.contains('hidden');
-                if (isLoginVisible) {
-                    showSignUp();
-                } else {
-                    showLogin();
-                }
-            });
-
-            switchToSignupLink.addEventListener('click', (e) => {
-                e.preventDefault();
+            // Menambahkan event listener ke link "Daftar di sini"
+            showSignupLink.addEventListener('click', (event) => {
+                event.preventDefault(); // Mencegah link berpindah halaman
                 showSignUp();
             });
 
-            switchToLoginLink.addEventListener('click', (e) => {
-                e.preventDefault();
+            // Menambahkan event listener ke link "Login di sini"
+            showLoginLink.addEventListener('click', (event) => {
+                event.preventDefault(); // Mencegah link berpindah halaman
                 showLogin();
             });
 
-            signupForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
+            // Event listener untuk form Sign Up
+            signupForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Mencegah form me-refresh halaman
+                
                 const email = document.getElementById('signup-email').value;
                 const password = document.getElementById('signup-password').value;
-                signupError.classList.add('hidden');
+                signupErrorDiv.classList.add('hidden'); // Sembunyikan pesan error lama
 
+                // Mengirim data pendaftaran ke Supabase
                 const { data, error } = await supabase.auth.signUp({ email, password });
 
                 if (error) {
-                    signupError.textContent = error.message;
-                    signupError.classList.remove('hidden');
+                    // Jika ada error dari Supabase, tampilkan pesannya
+                    signupErrorDiv.textContent = error.message;
+                    signupErrorDiv.classList.remove('hidden');
                 } else {
-                    alert('Pendaftaran berhasil! Silakan login dengan akun yang baru dibuat.');
-                    showLogin(); 
+                    // Jika berhasil, beri notifikasi dan pindah ke halaman login
+                    alert('Pendaftaran berhasil! Silakan login dengan akun yang baru Anda buat.');
+                    showLogin();
+                    loginForm.reset(); // Kosongkan form login
+                    signupForm.reset(); // Kosongkan form signup
                 }
             });
 
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
+            // Event listener untuk form Login
+            loginForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Mencegah form me-refresh halaman
+
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
-                loginError.classList.add('hidden');
+                loginErrorDiv.classList.add('hidden'); // Sembunyikan pesan error lama
 
+                // Mengirim data login ke Supabase untuk verifikasi
                 const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
                 if (error) {
-                    loginError.textContent = "Email atau password salah.";
-                    loginError.classList.remove('hidden');
+                    // Jika ada error (misal: password salah), tampilkan pesan
+                    loginErrorDiv.textContent = 'Login gagal. Periksa kembali email dan password Anda.';
+                    loginErrorDiv.classList.remove('hidden');
                 } else {
+                    // Jika berhasil, beri notifikasi
                     alert('Login berhasil!');
-                    // window.location.href = './beranda.html';
+                    // Di sini kita akan mengarahkan ke halaman beranda yang sesungguhnya
+                    // window.location.href = './beranda.html'; 
                 }
             });
         });
