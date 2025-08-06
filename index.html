@@ -14,19 +14,16 @@
     <!-- Memuat Google Fonts untuk tampilan teks yang lebih baik -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display.swap" rel="stylesheet">
     
     <style>
-        /* Style dasar untuk body dan font */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f0f4f8;
         }
-        /* Style ini akan menyembunyikan form yang tidak sedang aktif */
         .form-container.hidden {
             display: none;
         }
-        /* Animasi sederhana untuk transisi antar form */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -40,9 +37,7 @@
 
     <div class="w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden">
         
-        <!-- ======================================================= -->
-        <!-- == BAGIAN KIRI: BRANDING & GAMBAR (TIDAK PERLU DIUBAH) == -->
-        <!-- ======================================================= -->
+        <!-- Bagian Kiri: Branding & Gambar -->
         <div class="w-full md:w-1/2 p-8 md:p-12 text-white bg-cover bg-center" style="background-image: linear-gradient(rgba(20, 30, 48, 0.7), rgba(36, 59, 85, 0.7)), url('https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop');">
             <div class="flex items-center gap-4 mb-6">
                 <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-14 w-14 bg-white p-1 rounded-full">
@@ -57,12 +52,10 @@
             </p>
         </div>
 
-        <!-- ========================================================== -->
-        <!-- == BAGIAN KANAN: FORM LOGIN & SIGN UP (AREA INTERAKTIF) == -->
-        <!-- ========================================================== -->
+        <!-- Bagian Kanan: Form Interaktif -->
         <div class="w-full md:w-1/2 p-8 md:p-12">
 
-            <!-- "HALAMAN" LOGIN: Tampil secara default -->
+            <!-- Container Form Login -->
             <div id="login-view" class="form-container">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Login</h2>
                 <p class="text-slate-500 mb-8">Selamat datang kembali!</p>
@@ -84,7 +77,7 @@
                 </p>
             </div>
 
-            <!-- "HALAMAN" SIGN UP: Tersembunyi sampai link diklik -->
+            <!-- Container Form Sign Up -->
             <div id="signup-view" class="form-container hidden">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Create Account</h2>
                 <p class="text-slate-500 mb-8">Buat akun baru untuk bergabung.</p>
@@ -106,103 +99,93 @@
                 </p>
             </div>
 
+            <!-- Container Notifikasi Verifikasi Email -->
+            <div id="verification-view" class="form-container hidden text-center">
+                <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <h2 class="text-2xl font-bold text-slate-800 mt-4">Pendaftaran Berhasil!</h2>
+                <p class="text-slate-600 mt-2">Satu langkah lagi. Kami telah mengirimkan link verifikasi ke email Anda. Silakan periksa kotak masuk (atau spam) dan klik link tersebut untuk mengaktifkan akun Anda.</p>
+                <button id="back-to-login-button" class="mt-6 w-full bg-slate-200 text-slate-800 font-bold py-3 rounded-lg hover:bg-slate-300 transition-colors">Kembali ke Login</button>
+            </div>
+
         </div>
     </div>
 
-    <!-- ========================================================== -->
-    <!-- == SCRIPT UTAMA UNTUK SEMUA FUNGSI (INTI DARI WEBSITE) == -->
-    <!-- ========================================================== -->
     <script>
-        // Menunggu seluruh halaman HTML dimuat sebelum menjalankan script
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // Kunci dan URL untuk koneksi ke Supabase (sudah diisi)
             const SUPABASE_URL = 'https://jelcycdbdokcalsuptwm.supabase.co';
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ1NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
             
-            // Membuat koneksi ke Supabase
             const { createClient } = supabase;
             const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Mengambil elemen-elemen dari HTML untuk dimanipulasi
+            // Mengambil semua elemen interaktif dari HTML
             const loginView = document.getElementById('login-view');
             const signupView = document.getElementById('signup-view');
+            const verificationView = document.getElementById('verification-view');
+            
             const loginForm = document.getElementById('login-form');
             const signupForm = document.getElementById('signup-form');
+            
             const showSignupLink = document.getElementById('show-signup-link');
             const showLoginLink = document.getElementById('show-login-link');
+            const backToLoginButton = document.getElementById('back-to-login-button');
+
             const loginErrorDiv = document.getElementById('login-error');
             const signupErrorDiv = document.getElementById('signup-error');
 
-            // --- FUNGSI UNTUK BERPINDAH TAMPILAN ---
-            // Fungsi untuk menampilkan form Sign Up dan menyembunyikan form Login
-            function showSignUp() {
+            // --- FUNGSI UNTUK MENGATUR TAMPILAN ---
+            function showView(viewToShow) {
+                // Sembunyikan semua tampilan dulu
                 loginView.classList.add('hidden');
-                signupView.classList.remove('hidden');
-            }
-            // Fungsi untuk menampilkan form Login dan menyembunyikan form Sign Up
-            function showLogin() {
                 signupView.classList.add('hidden');
-                loginView.classList.remove('hidden');
+                verificationView.classList.add('hidden');
+                // Tampilkan yang diminta
+                viewToShow.classList.remove('hidden');
             }
 
-            // --- EVENT LISTENER UNTUK LINK PERGANTIAN TAMPILAN ---
-            // Saat link "Daftar di sini" diklik, panggil fungsi showSignUp
-            showSignupLink.addEventListener('click', (event) => {
-                event.preventDefault(); // Mencegah link berpindah halaman
-                showSignUp();
-            });
-            // Saat link "Login di sini" diklik, panggil fungsi showLogin
-            showLoginLink.addEventListener('click', (event) => {
-                event.preventDefault(); // Mencegah link berpindah halaman
-                showLogin();
-            });
+            // --- EVENT LISTENER UNTUK NAVIGASI ANTAR TAMPILAN ---
+            showSignupLink.addEventListener('click', (e) => { e.preventDefault(); showView(signupView); });
+            showLoginLink.addEventListener('click', (e) => { e.preventDefault(); showView(loginView); });
+            backToLoginButton.addEventListener('click', (e) => { e.preventDefault(); showView(loginView); });
 
-            // --- LOGIKA UTAMA UNTUK SIGN UP & LOGIN ---
-            // Event listener untuk form Sign Up
+            // --- LOGIKA FORM SIGN UP ---
             signupForm.addEventListener('submit', async (event) => {
-                event.preventDefault(); // Mencegah form me-refresh halaman
-                
+                event.preventDefault();
                 const email = document.getElementById('signup-email').value;
                 const password = document.getElementById('signup-password').value;
-                signupErrorDiv.classList.add('hidden'); // Sembunyikan pesan error lama
+                signupErrorDiv.classList.add('hidden');
 
-                // Mengirim data pendaftaran ke Supabase
                 const { data, error } = await supabaseClient.auth.signUp({ email, password });
 
                 if (error) {
-                    // Jika ada error dari Supabase, tampilkan pesannya
                     signupErrorDiv.textContent = error.message;
                     signupErrorDiv.classList.remove('hidden');
                 } else {
-                    // Jika berhasil, beri notifikasi dan pindah ke halaman login
-                    alert('Pendaftaran berhasil! Silakan login dengan akun yang baru Anda buat.');
-                    showLogin();
-                    loginForm.reset(); // Kosongkan form login
-                    signupForm.reset(); // Kosongkan form signup
+                    // Jika pendaftaran berhasil, tampilkan halaman notifikasi verifikasi
+                    showView(verificationView);
+                    signupForm.reset();
                 }
             });
 
-            // Event listener untuk form Login
+            // --- LOGIKA FORM LOGIN ---
             loginForm.addEventListener('submit', async (event) => {
-                event.preventDefault(); // Mencegah form me-refresh halaman
-
+                event.preventDefault();
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
-                loginErrorDiv.classList.add('hidden'); // Sembunyikan pesan error lama
+                loginErrorDiv.classList.add('hidden');
 
-                // Mengirim data login ke Supabase untuk verifikasi
                 const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
                 if (error) {
-                    // Jika ada error (misal: password salah), tampilkan pesan
-                    loginErrorDiv.textContent = 'Login gagal. Periksa kembali email dan password Anda.';
+                    if (error.message.includes("Email not confirmed")) {
+                        loginErrorDiv.textContent = 'Akun Anda belum diverifikasi. Silakan cek email Anda.';
+                    } else {
+                        loginErrorDiv.textContent = 'Login gagal. Periksa kembali email dan password Anda.';
+                    }
                     loginErrorDiv.classList.remove('hidden');
                 } else {
-                    // Jika berhasil, beri notifikasi
-                    alert('Login berhasil!');
-                    // Di sini kita akan mengarahkan ke halaman beranda yang sesungguhnya
-                    // window.location.href = './beranda.html'; 
+                    // Jika login berhasil, arahkan ke halaman beranda
+                    window.location.href = './beranda.html'; 
                 }
             });
         });
