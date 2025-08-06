@@ -22,11 +22,11 @@
             font-family: 'Poppins', sans-serif;
             background-color: #f0f4f8;
         }
-        /* Menyembunyikan form yang tidak aktif */
+        /* Style ini akan menyembunyikan form yang tidak sedang aktif */
         .form-container.hidden {
             display: none;
         }
-        /* Animasi sederhana untuk transisi form */
+        /* Animasi sederhana untuk transisi antar form */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -40,7 +40,9 @@
 
     <div class="w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden">
         
-        <!-- Bagian Kiri: Branding & Gambar -->
+        <!-- ======================================================= -->
+        <!-- == BAGIAN KIRI: BRANDING & GAMBAR (TIDAK PERLU DIUBAH) == -->
+        <!-- ======================================================= -->
         <div class="w-full md:w-1/2 p-8 md:p-12 text-white bg-cover bg-center" style="background-image: linear-gradient(rgba(20, 30, 48, 0.7), rgba(36, 59, 85, 0.7)), url('https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop');">
             <div class="flex items-center gap-4 mb-6">
                 <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-14 w-14 bg-white p-1 rounded-full">
@@ -55,10 +57,12 @@
             </p>
         </div>
 
-        <!-- Bagian Kanan: Form Login & Sign Up -->
+        <!-- ========================================================== -->
+        <!-- == BAGIAN KANAN: FORM LOGIN & SIGN UP (AREA INTERAKTIF) == -->
+        <!-- ========================================================== -->
         <div class="w-full md:w-1/2 p-8 md:p-12">
 
-            <!-- Container Form Login (Aktif secara default) -->
+            <!-- "HALAMAN" LOGIN: Tampil secara default -->
             <div id="login-view" class="form-container">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Login</h2>
                 <p class="text-slate-500 mb-8">Selamat datang kembali!</p>
@@ -80,7 +84,7 @@
                 </p>
             </div>
 
-            <!-- Container Form Sign Up (Tersembunyi secara default) -->
+            <!-- "HALAMAN" SIGN UP: Tersembunyi sampai link diklik -->
             <div id="signup-view" class="form-container hidden">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Create Account</h2>
                 <p class="text-slate-500 mb-8">Buat akun baru untuk bergabung.</p>
@@ -105,7 +109,9 @@
         </div>
     </div>
 
-    <!-- Script Utama untuk Fungsionalitas -->
+    <!-- ========================================================== -->
+    <!-- == SCRIPT UTAMA UNTUK SEMUA FUNGSI (INTI DARI WEBSITE) == -->
+    <!-- ========================================================== -->
     <script>
         // Menunggu seluruh halaman HTML dimuat sebelum menjalankan script
         document.addEventListener('DOMContentLoaded', () => {
@@ -115,7 +121,8 @@
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ1NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
             
             // Membuat koneksi ke Supabase
-            const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            const { createClient } = supabase;
+            const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
             // Mengambil elemen-elemen dari HTML untuk dimanipulasi
             const loginView = document.getElementById('login-view');
@@ -127,30 +134,31 @@
             const loginErrorDiv = document.getElementById('login-error');
             const signupErrorDiv = document.getElementById('signup-error');
 
+            // --- FUNGSI UNTUK BERPINDAH TAMPILAN ---
             // Fungsi untuk menampilkan form Sign Up dan menyembunyikan form Login
             function showSignUp() {
                 loginView.classList.add('hidden');
                 signupView.classList.remove('hidden');
             }
-
             // Fungsi untuk menampilkan form Login dan menyembunyikan form Sign Up
             function showLogin() {
                 signupView.classList.add('hidden');
                 loginView.classList.remove('hidden');
             }
 
-            // Menambahkan event listener ke link "Daftar di sini"
+            // --- EVENT LISTENER UNTUK LINK PERGANTIAN TAMPILAN ---
+            // Saat link "Daftar di sini" diklik, panggil fungsi showSignUp
             showSignupLink.addEventListener('click', (event) => {
                 event.preventDefault(); // Mencegah link berpindah halaman
                 showSignUp();
             });
-
-            // Menambahkan event listener ke link "Login di sini"
+            // Saat link "Login di sini" diklik, panggil fungsi showLogin
             showLoginLink.addEventListener('click', (event) => {
                 event.preventDefault(); // Mencegah link berpindah halaman
                 showLogin();
             });
 
+            // --- LOGIKA UTAMA UNTUK SIGN UP & LOGIN ---
             // Event listener untuk form Sign Up
             signupForm.addEventListener('submit', async (event) => {
                 event.preventDefault(); // Mencegah form me-refresh halaman
@@ -160,7 +168,7 @@
                 signupErrorDiv.classList.add('hidden'); // Sembunyikan pesan error lama
 
                 // Mengirim data pendaftaran ke Supabase
-                const { data, error } = await supabase.auth.signUp({ email, password });
+                const { data, error } = await supabaseClient.auth.signUp({ email, password });
 
                 if (error) {
                     // Jika ada error dari Supabase, tampilkan pesannya
@@ -184,7 +192,7 @@
                 loginErrorDiv.classList.add('hidden'); // Sembunyikan pesan error lama
 
                 // Mengirim data login ke Supabase untuk verifikasi
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
                 if (error) {
                     // Jika ada error (misal: password salah), tampilkan pesan
