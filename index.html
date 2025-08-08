@@ -50,6 +50,16 @@
                 min-width: 50%;
             }
         }
+        /* Animasi Fade-in-up */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -90,27 +100,27 @@
             <div class="container mx-auto px-4 sm:px-6">
                 <div class="grid md:grid-cols-2 gap-8 items-center">
                     <!-- Kolom Kiri: Teks dan Pencarian -->
-                    <div class="space-y-6">
+                    <div class="space-y-6 reveal">
                         <p class="font-semibold text-lg">Official Website of English Court</p>
-                        <h1 class="text-5xl lg:text-6xl font-extrabold tracking-tight">LEVEL UP YOUR ENGLISH</h1>
+                        <h1 class="text-5xl lg:text-6xl font-extrabold tracking-tight">SMAGALA English Community</h1>
                         <div class="relative">
                             <input type="text" placeholder="Cari informasi kegiatan, materi, atau pengumuman..." class="w-full py-4 pl-5 pr-12 rounded-full text-slate-800 focus:ring-2 focus:ring-blue-400 border-0">
                             <button class="absolute top-1/2 right-3 -translate-y-1/2 bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                             </button>
                         </div>
-                        <p class="text-lg italic opacity-90">"The limits of my language mean the limits of my world." - Ludwig Wittgenstein</p>
+                        <p class="text-lg italic opacity-90">""Connecting minds, bridging cultures through English. Let's grow together!"</p>
                     </div>
                     <!-- Kolom Kanan: Gambar -->
                     <div class="hidden md:block relative h-full">
-                         <img src="https://i.imgur.com/dI8zJmf.png">
+                         <img src="https://i.imgur.com/dI8zJmf.png" alt="Siswa Sekolah" class="absolute bottom-[-5rem] right-0 w-[500px] h-auto reveal">
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Navbar Ikon -->
-        <nav class="bg-white shadow-lg -mt-12 relative z-30 mx-4 md:mx-auto max-w-6xl rounded-2xl p-4">
+        <nav class="bg-white shadow-lg -mt-12 relative z-30 mx-4 md:mx-auto max-w-6xl rounded-2xl p-4 reveal">
             <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-10 gap-4 text-center">
                 <a href="./sambutan.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🏠</span><p class="text-sm font-semibold mt-1">Sambutan</p></a>
                 <a href="./visimisi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🎯</span><p class="text-sm font-semibold mt-1">Visi & Misi</p></a>
@@ -128,13 +138,13 @@
         <!-- Artikel & Berita -->
         <section class="py-20 bg-slate-50">
             <div class="container mx-auto px-6">
-                <div class="flex justify-between items-center mb-8">
+                <div class="flex justify-between items-center mb-8 reveal">
                     <h2 class="text-3xl font-bold text-slate-800">Artikel & Berita Klub</h2>
                     <a href="./artikel.html" class="font-semibold text-blue-600 hover:underline">Lihat Semua ></a>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- Template Artikel 1 -->
-                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group">
+                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group reveal">
                         <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300">
                         <div class="p-4">
                             <p class="text-sm text-blue-500 font-semibold">Berita</p>
@@ -143,7 +153,7 @@
                         </div>
                     </a>
                     <!-- Template Artikel 2 -->
-                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group">
+                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group reveal" style="transition-delay: 100ms;">
                         <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300">
                         <div class="p-4">
                             <p class="text-sm text-blue-500 font-semibold">Artikel</p>
@@ -152,7 +162,7 @@
                         </div>
                     </a>
                     <!-- Template Artikel 3 -->
-                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group">
+                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group reveal" style="transition-delay: 200ms;">
                         <img src="https://images.unsplash.com/photo-1531482615713-2c657768cd91?q=80&w=2070&auto=format&fit=crop" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300">
                         <div class="p-4">
                             <p class="text-sm text-blue-500 font-semibold">Berita</p>
@@ -161,7 +171,7 @@
                         </div>
                     </a>
                     <!-- Template Artikel 4 -->
-                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group">
+                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group reveal" style="transition-delay: 300ms;">
                         <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300">
                         <div class="p-4">
                             <p class="text-sm text-blue-500 font-semibold">Artikel</p>
@@ -177,7 +187,7 @@
         <section class="py-20 bg-white">
             <div class="container mx-auto px-6">
                 <!-- Agenda -->
-                <div class="mb-16">
+                <div class="mb-16 reveal">
                     <div class="flex justify-between items-center mb-8">
                         <h2 class="text-3xl font-bold text-slate-800">Agenda Kegiatan</h2>
                         <a href="./agenda.html" class="font-semibold text-blue-600 hover:underline">Lihat Semua Agenda ></a>
@@ -186,9 +196,9 @@
                         <div id="agenda-track" class="slider-track">
                              <!-- Slide 1 -->
                             <div class="slider-slide p-4">
-                                <div class="bg-white p-6 rounded-xl h-full flex gap-4">
-                                    <img src="https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?q=80&w=2070&auto=format&fit=crop" class="w-32 h-32 rounded-md object-cover">
-                                    <div>
+                                <div class="bg-white p-6 rounded-xl h-full flex flex-col sm:flex-row gap-4 items-center">
+                                    <img src="https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?q=80&w=2070&auto=format&fit=crop" class="w-full sm:w-32 h-32 rounded-md object-cover">
+                                    <div class="text-center sm:text-left">
                                         <p class="font-bold text-lg">Debate Practice Session</p>
                                         <p class="text-sm text-slate-600">Sabtu, 12 Agustus 2025</p>
                                         <p class="text-sm text-slate-500 mt-1">08:00 - 10:00 WIB</p>
@@ -197,9 +207,9 @@
                             </div>
                             <!-- Slide 2 -->
                             <div class="slider-slide p-4">
-                                <div class="bg-white p-6 rounded-xl h-full flex gap-4">
-                                    <img src="https://images.unsplash.com/photo-1587825140708-df876c1b5df1?q=80&w=2070&auto=format&fit=crop" class="w-32 h-32 rounded-md object-cover">
-                                     <div>
+                                <div class="bg-white p-6 rounded-xl h-full flex flex-col sm:flex-row gap-4 items-center">
+                                    <img src="https://images.unsplash.com/photo-1587825140708-df876c1b5df1?q=80&w=2070&auto=format&fit=crop" class="w-full sm:w-32 h-32 rounded-md object-cover">
+                                     <div class="text-center sm:text-left">
                                         <p class="font-bold text-lg">Guest Speaker: "Global Mindset"</p>
                                         <p class="text-sm text-slate-600">Jumat, 18 Agustus 2025</p>
                                         <p class="text-sm text-slate-500 mt-1">14:00 - 16:00 WIB</p>
@@ -210,7 +220,7 @@
                     </div>
                 </div>
                 <!-- Pengumuman -->
-                <div>
+                <div class="reveal">
                     <div class="flex justify-between items-center mb-8">
                         <h2 class="text-3xl font-bold text-slate-800">Pengumuman</h2>
                         <a href="./pengumuman.html" class="font-semibold text-blue-600 hover:underline">Lihat Semua ></a>
@@ -218,7 +228,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Template Pengumuman 1 -->
                         <div class="bg-slate-100 rounded-lg p-4 flex items-center gap-4 hover:bg-slate-200 transition-colors">
-                            <img src="https://placehold.co/100x100/0093E9/FFFFFF?text=EC" class="w-24 h-24 rounded-md object-cover">
+                            <img src="https://placehold.co/100x100/0093E9/FFFFFF?text=EC" class="w-24 h-24 rounded-md object-cover flex-shrink-0">
                             <div>
                                 <p class="font-bold">Pertemuan Rutin Pekan Ini</p>
                                 <p class="text-sm text-slate-600">Sabtu, 12 Agustus 2025</p>
@@ -226,7 +236,7 @@
                         </div>
                         <!-- Template Pengumuman 2 -->
                         <div class="bg-slate-100 rounded-lg p-4 flex items-center gap-4 hover:bg-slate-200 transition-colors">
-                            <img src="https://placehold.co/100x100/80D0C7/FFFFFF?text=EC" class="w-24 h-24 rounded-md object-cover">
+                            <img src="https://placehold.co/100x100/80D0C7/FFFFFF?text=EC" class="w-24 h-24 rounded-md object-cover flex-shrink-0">
                             <div>
                                 <p class="font-bold">Lomba Debat Internal</p>
                                 <p class="text-sm text-slate-600">Pendaftaran Dibuka!</p>
@@ -234,7 +244,7 @@
                         </div>
                         <!-- Template Pengumuman 3 -->
                         <div class="bg-slate-100 rounded-lg p-4 flex items-center gap-4 hover:bg-slate-200 transition-colors">
-                           <img src="https://placehold.co/100x100/0093E9/FFFFFF?text=EC" class="w-24 h-24 rounded-md object-cover">
+                           <img src="https://placehold.co/100x100/0093E9/FFFFFF?text=EC" class="w-24 h-24 rounded-md object-cover flex-shrink-0">
                             <div>
                                 <p class="font-bold">Sesi Scrabble & Games</p>
                                 <p class="text-sm text-slate-600">Jumat, 18 Agustus 2025</p>
@@ -323,6 +333,21 @@
 
             // --- INISIALISASI SLIDER ---
             setupSlider('agenda-track', 6000);
+
+            // --- LOGIKA ANIMASI SCROLL ---
+            function revealOnScroll() {
+                const reveals = document.querySelectorAll('.reveal');
+                for (let i = 0; i < reveals.length; i++) {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = reveals[i].getBoundingClientRect().top;
+                    const elementVisible = 100; // Adjust this value to change when the animation triggers
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveals[i].classList.add('active');
+                    }
+                }
+            }
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll(); // Trigger once on load
         });
     </script>
 </body>
