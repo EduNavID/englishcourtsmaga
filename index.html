@@ -32,153 +32,233 @@
         .nav-button:hover {
             transform: translateY(-4px);
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
-            background-color: #f5f3ff; /* violet-50 */
+            background-color: #f5f3ff;
         }
-        .img-hover {
-            transition: transform 0.3s ease;
-        }
-        .img-hover:hover {
-            transform: scale(1.05);
+        /* Style untuk Slider */
+        .slider-container { position: relative; overflow: hidden; }
+        .slider-track { display: flex; transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
+        .slider-slide { min-width: 100%; box-sizing: border-box; }
+        @media (min-width: 768px) {
+            .announcement-slide { min-width: 33.33%; }
         }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- ========================================================== -->
-    <!-- == BAGIAN UNTUK PENGUNJUNG UMUM (BELUM LOGIN)           == -->
-    <!-- ========================================================== -->
-    <div id="public-view">
-        <header class="bg-white/90 backdrop-blur-lg shadow-sm sticky top-0 z-50">
-            <div class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
-                <a href="./index.html" class="flex items-center gap-3">
-                    <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-12 w-12">
-                    <span class="text-xl font-bold text-blue-700">English Court</span>
+    <!-- Header Adaptif -->
+    <header class="bg-white/90 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+            <a href="./index.html" class="flex items-center gap-3">
+                <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-12 w-12">
+                <span class="text-xl font-bold text-blue-700">English Court</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <button id="search-button" class="p-2 rounded-full hover:bg-slate-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                </button>
+                
+                <!-- Tombol Login untuk Pengunjung (Default) -->
+                <a id="guest-login-button" href="./login.html" class="bg-blue-600 text-white font-bold px-5 py-2 rounded-lg hover:bg-blue-700 transition-all shadow-md">
+                    Login / Gabung
                 </a>
-                <div class="flex items-center gap-4">
-                    <button id="search-button" class="p-2 rounded-full hover:bg-slate-200 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+
+                <!-- Menu Profil untuk Anggota (Awalnya tersembunyi) -->
+                <div id="user-profile-area" class="relative hidden">
+                    <button id="profile-button" class="flex items-center gap-2 group">
+                        <div class="hidden sm:block text-right">
+                            <p class="font-semibold text-sm text-slate-700" id="user-email-display">Memuat...</p>
+                        </div>
+                        <img id="profile-avatar" src="https://placehold.co/40x40/dbeafe/4338ca?text=U" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-slate-200 group-hover:border-blue-400 transition object-cover">
                     </button>
-                    <a href="./login.html" class="bg-blue-600 text-white font-bold px-5 py-2 rounded-lg hover:bg-blue-700 transition-all shadow-md">
-                        Login
-                    </a>
+                    <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-20 py-1">
+                        <a href="./profil.html" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">Profil Saya</a>
+                        <div class="border-t border-slate-100 my-1"></div>
+                        <a href="#" id="logout-button" class="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</a>
+                    </div>
                 </div>
             </div>
-        </header>
+        </nav>
+    </header>
 
-        <main>
-            <!-- BACKGROUND (HERO SECTION) -->
-            <section class="relative h-[50vh] md:h-[60vh] bg-cover bg-center text-white flex items-center justify-center" style="background-image: linear-gradient(rgba(10, 20, 40, 0.5), rgba(10, 20, 40, 0.5)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto-format&fit=crop');">
-                <div class="text-center p-4">
-                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Level Up Your English.</h1>
-                    <h2 class="text-4xl md:text-6xl font-extrabold text-violet-300">Unleash Your Confidence.</h2>
+    <main>
+        <!-- BACKGROUND (HERO SECTION) -->
+        <section class="relative h-[50vh] md:h-[60vh] bg-cover bg-center text-white flex items-center justify-center" style="background-image: linear-gradient(rgba(10, 20, 40, 0.5), rgba(10, 20, 40, 0.5)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto-format&fit=crop');">
+            <div class="text-center p-4">
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Level Up Your English.</h1>
+                <h2 class="text-4xl md:text-6xl font-extrabold text-violet-300">Unleash Your Confidence.</h2>
+            </div>
+        </section>
+
+        <!-- NAVBAR -->
+        <nav class="bg-white shadow-lg -mt-16 relative z-30 mx-4 md:mx-auto max-w-5xl rounded-2xl p-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 items-center">
+                <a href="./index.html" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
+                    <span class="text-3xl">🏠</span>
+                    <p class="font-semibold text-slate-700">Beranda</p>
+                </a>
+                <a href="./informasi.html" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
+                    <span class="text-3xl">ℹ️</span>
+                    <p class="font-semibold text-slate-700">Informasi</p>
+                </a>
+                <a href="./dokumentasi.html" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
+                    <span class="text-3xl">📸</span>
+                    <p class="font-semibold text-slate-700">Dokumentasi</p>
+                </a>
+                <a href="./pengumuman.html" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
+                    <span class="text-3xl">📢</span>
+                    <p class="font-semibold text-slate-700">Pengumuman</p>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Info Singkat EC SMAGA -->
+        <section class="pt-20 pb-10 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <div class="reveal">
+                    <h2 class="text-3xl font-bold text-slate-800">Welcome to English Court!</h2>
+                    <p class="text-slate-500 mt-4 text-lg max-w-3xl mx-auto">Kami adalah komunitas siswa SMAN 3 Lamongan yang bersemangat untuk menguasai Bahasa Inggris. Lebih dari sekadar ekskul, kami adalah keluarga yang belajar, berkompetisi, dan bertumbuh bersama.</p>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- NAVBAR BARU YANG LEBIH FUN -->
-            <nav class="bg-white shadow-lg -mt-16 relative z-30 mx-4 md:mx-auto max-w-5xl rounded-2xl p-4">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 items-center">
-                    <a href="./index.html" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
-                        <span class="text-3xl">🏠</span>
-                        <p class="font-semibold text-slate-700">Beranda</p>
-                    </a>
-                    <a href="./informasi.html" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
-                        <span class="text-3xl">ℹ️</span>
-                        <p class="font-semibold text-slate-700">Informasi</p>
-                    </a>
-                    <a href="./dokumentasi.html" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
-                        <span class="text-3xl">📸</span>
-                        <p class="font-semibold text-slate-700">Dokumentasi</p>
-                    </a>
-                    <a href="./pengumuman.html" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
-                        <span class="text-3xl">📢</span>
-                        <p class="font-semibold text-slate-700">Pengumuman</p>
-                    </a>
+        <!-- Preview Pengumuman (SLIDER) -->
+        <section class="py-20 bg-slate-50">
+            <div class="container mx-auto px-6">
+                <div class="reveal text-center">
+                    <h2 class="text-3xl font-bold text-slate-800">Pengumuman Terkini</h2>
+                    <p class="text-slate-500 mt-2">Jangan sampai ketinggalan informasi penting seputar kegiatan kita!</p>
                 </div>
-            </nav>
-
-            <!-- Info Singkat EC SMAGA -->
-            <section class="pt-20 pb-10 bg-white">
-                <div class="container mx-auto px-6 text-center">
-                    <div class="reveal">
-                        <h2 class="text-3xl font-bold text-slate-800">Welcome to English Court!</h2>
-                        <p class="text-slate-500 mt-4 text-lg max-w-3xl mx-auto">Kami adalah komunitas siswa SMAN 3 Lamongan yang bersemangat untuk menguasai Bahasa Inggris. Lebih dari sekadar ekskul, kami adalah keluarga yang belajar, berkompetisi, dan bertumbuh bersama.</p>
+                <div class="mt-12 reveal slider-container max-w-6xl mx-auto">
+                    <div id="announcement-track" class="slider-track">
+                        <div class="slider-slide announcement-slide p-4"><div class="card-hover bg-white p-6 rounded-xl h-full"><p class="text-sm text-violet-600 font-semibold">10 Agu 2025</p><h3 class="text-xl font-bold mt-2">Jadwal Pertemuan Pekan Ini</h3><p class="mt-2 text-slate-600">Pertemuan rutin pekan ini akan diadakan pada hari Sabtu, pukul 14:00 di Ruang Multimedia untuk persiapan lomba...</p></div></div>
+                        <div class="slider-slide announcement-slide p-4"><div class="card-hover bg-white p-6 rounded-xl h-full"><p class="text-sm text-violet-600 font-semibold">08 Agu 2025</p><h3 class="text-xl font-bold mt-2">Pendaftaran Lomba Debat Internal</h3><p class="mt-2 text-slate-600">Segera daftarkan tim kalian untuk kompetisi debat internal EC! Pendaftaran ditutup tanggal 15 Agustus...</p></div></div>
+                        <div class="slider-slide announcement-slide p-4"><div class="card-hover bg-white p-6 rounded-xl h-full"><p class="text-sm text-violet-600 font-semibold">05 Agu 2025</p><h3 class="text-xl font-bold mt-2">Pembicara Tamu dari Australia</h3><p class="mt-2 text-slate-600">Jangan lewatkan sesi spesial bersama Mr. David Smith, seorang native speaker yang akan berbagi tips...</p></div></div>
                     </div>
                 </div>
             </section>
 
-            <!-- Preview Pengumuman -->
-            <section class="py-20 bg-slate-50">
-                <div class="container mx-auto px-6">
-                    <div class="reveal text-center">
-                        <h2 class="text-3xl font-bold text-slate-800">Pengumuman Terkini</h2>
-                        <p class="text-slate-500 mt-2">Jangan sampai ketinggalan informasi penting seputar kegiatan kita!</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-                        <div class="reveal card-hover bg-white p-6 rounded-xl">
-                            <p class="text-sm text-violet-600 font-semibold">10 Agu 2025</p>
-                            <h3 class="text-xl font-bold mt-2">Jadwal Pertemuan Pekan Ini</h3>
-                            <p class="mt-2 text-slate-600">Pertemuan rutin pekan ini akan diadakan pada hari Sabtu, pukul 14:00 di Ruang Multimedia untuk persiapan lomba...</p>
-                        </div>
-                        <div class="reveal card-hover bg-white p-6 rounded-xl">
-                            <p class="text-sm text-violet-600 font-semibold">08 Agu 2025</p>
-                            <h3 class="text-xl font-bold mt-2">Pendaftaran Lomba Debat Internal</h3>
-                            <p class="mt-2 text-slate-600">Segera daftarkan tim kalian untuk kompetisi debat internal EC! Pendaftaran ditutup tanggal 15 Agustus...</p>
-                        </div>
-                        <div class="reveal card-hover bg-white p-6 rounded-xl">
-                            <p class="text-sm text-violet-600 font-semibold">05 Agu 2025</p>
-                            <h3 class="text-xl font-bold mt-2">Pembicara Tamu dari Australia</h3>
-                            <p class="mt-2 text-slate-600">Jangan lewatkan sesi spesial bersama Mr. David Smith, seorang native speaker yang akan berbagi tips...</p>
-                        </div>
-                    </div>
-                    <div class="text-center mt-12 reveal">
-                        <a href="./pengumuman.html" class="bg-slate-800 text-white font-bold px-6 py-3 rounded-lg hover:bg-slate-900 transition-all">Lihat Semua Pengumuman</a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Dokumentasi Terkini -->
+            <!-- Dokumentasi Terkini (SLIDER) -->
             <section class="py-20 bg-white">
                 <div class="container mx-auto px-6 text-center">
                     <div class="reveal">
                         <h2 class="text-3xl font-bold text-slate-800">Dokumentasi Terkini</h2>
                         <p class="text-slate-500 mt-2">Momen-momen seru yang berhasil kami abadikan.</p>
                     </div>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
-                        <div class="reveal overflow-hidden rounded-xl shadow-lg"><img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2232&auto=format&fit=crop" class="img-hover w-full h-full object-cover aspect-square"></div>
-                        <div class="reveal overflow-hidden rounded-xl shadow-lg"><img src="https://images.unsplash.com/photo-1531482615713-2c657768cd91?q=80&w=2070&auto=format&fit=crop" class="img-hover w-full h-full object-cover aspect-square"></div>
-                        <div class="reveal overflow-hidden rounded-xl shadow-lg"><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" class="img-hover w-full h-full object-cover aspect-square"></div>
-                        <div class="reveal overflow-hidden rounded-xl shadow-lg"><img src="https://images.unsplash.com/photo-1543269664-56d93c1b41a6?q=80&w=2070&auto=format&fit=crop" class="img-hover w-full h-full object-cover aspect-square"></div>
-                    </div>
-                     <div class="text-center mt-12 reveal">
-                        <a href="./dokumentasi.html" class="bg-slate-800 text-white font-bold px-6 py-3 rounded-lg hover:bg-slate-900 transition-all">Lihat Dokumentasi Lengkap</a>
+                    <div class="mt-12 reveal slider-container rounded-xl shadow-lg max-w-4xl mx-auto">
+                        <div id="docs-track" class="slider-track aspect-video">
+                            <div class="slider-slide"><img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2232&auto-format&fit=crop" class="w-full h-full object-cover"></div>
+                            <div class="slider-slide"><img src="https://images.unsplash.com/photo-1531482615713-2c657768cd91?q=80&w=2070&auto-format&fit=crop" class="w-full h-full object-cover"></div>
+                            <div class="slider-slide"><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto-format&fit=crop" class="w-full h-full object-cover"></div>
+                            <div class="slider-slide"><img src="https://images.unsplash.com/photo-1543269664-56d93c1b41a6?q=80&w=2070&auto-format&fit=crop" class="w-full h-full object-cover"></div>
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
-
-        <!-- Footer Informatif -->
-        <footer class="bg-slate-800 text-white">
-            <!-- ... Konten Footer ... -->
-        </footer>
+        
+        <footer class="bg-slate-800 text-white"><!-- ... Konten Footer ... --></footer>
     </div>
     
-    <!-- MODAL PENCARIAN (TERSEMBUNYI) -->
-    <div id="search-modal" class="hidden fixed inset-0 bg-black/60 z-[100] flex justify-center items-start pt-20 p-4">
-        <!-- ... Konten Modal Pencarian ... -->
-    </div>
-    
-    <!-- ========================================================== -->
-    <!-- == BAGIAN UNTUK ANGGOTA (SUDAH LOGIN)                  == -->
-    <!-- ========================================================== -->
-    <div id="dashboard-view" class="hidden">
-        <!-- ... Kode Dasbor (tidak berubah) ... -->
-    </div>
+    <div id="search-modal" class="hidden fixed inset-0 bg-black/60 z-[100] flex justify-center items-start pt-20 p-4"><!-- ... Konten Modal Pencarian ... --></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // ... Kode JavaScript (tidak berubah) ...
+            const SUPABASE_URL = 'https://jelcycdbdokcalsuptwm.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ1NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
+            const { createClient } = supabase;
+            const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            // --- FUNGSI SLIDER UNIVERSAL ---
+            function setupSlider(trackId, interval) {
+                const track = document.getElementById(trackId);
+                if (!track) return;
+                
+                let slides = Array.from(track.children);
+                if(slides.length <= 1) return;
+
+                slides.forEach(slide => track.appendChild(slide.cloneNode(true)));
+                
+                let currentSlide = 0;
+                let slideWidth = slides[0].getBoundingClientRect().width;
+
+                function autoPlay() {
+                    currentSlide++;
+                    track.style.transition = 'transform 0.7s ease-in-out';
+                    track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+
+                    if (currentSlide >= slides.length) {
+                        setTimeout(() => {
+                            track.style.transition = 'none';
+                            track.style.transform = 'translateX(0)';
+                            currentSlide = 0;
+                        }, 700);
+                    }
+                }
+                
+                setInterval(autoPlay, interval);
+
+                window.addEventListener('resize', () => {
+                    slideWidth = slides[0].getBoundingClientRect().width;
+                    track.style.transition = 'none';
+                    track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+                });
+            }
+
+            setupSlider('announcement-track', 5000);
+            setupSlider('docs-track', 4000);
+
+            // --- LOGIKA ADAPTIF HEADER & FITUR ---
+            const userProfileArea = document.getElementById('user-profile-area');
+            const guestLoginButton = document.getElementById('guest-login-button');
+
+            async function checkUserSession() {
+                const { data } = await supabaseClient.auth.getSession();
+                if (data.session) {
+                    setupForMember(data.session.user);
+                } else {
+                    setupForGuest();
+                }
+            }
+
+            function setupForMember(user) {
+                guestLoginButton.classList.add('hidden');
+                userProfileArea.classList.remove('hidden');
+
+                const userEmailDisplay = document.getElementById('user-email-display');
+                const logoutButton = document.getElementById('logout-button');
+                const profileButton = document.getElementById('profile-button');
+                const profileDropdown = document.getElementById('profile-dropdown');
+                
+                userEmailDisplay.textContent = user.email;
+
+                logoutButton.addEventListener('click', async () => {
+                    await supabaseClient.auth.signOut();
+                    window.location.reload();
+                });
+
+                profileButton.addEventListener('click', () => profileDropdown.classList.toggle('hidden'));
+                window.addEventListener('click', (e) => {
+                    if (!profileButton.contains(e.target)) profileDropdown.classList.add('hidden');
+                });
+            }
+
+            function setupForGuest() {
+                userProfileArea.classList.add('hidden');
+                guestLoginButton.classList.remove('hidden');
+
+                const restrictedLinks = document.querySelectorAll('.requires-login');
+                restrictedLinks.forEach(link => {
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        alert('Anda harus login untuk mengakses fitur ini.');
+                        window.location.href = './login.html';
+                    });
+                });
+            }
+            
+            checkUserSession();
+            
+            // ... Sisa script untuk modal pencarian dan animasi scroll ...
         });
     </script>
 </body>
