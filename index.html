@@ -5,109 +5,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English Court - SMAN 3 Lamongan</title>
     
-    <!-- Memuat Tailwind CSS untuk styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Memuat Library Supabase untuk koneksi ke database -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Memuat Google Fonts untuk tampilan teks yang lebih baik -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display.swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display.swap" rel="stylesheet">
     
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f4f8;
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
-        .form-container.hidden {
-            display: none;
+        .reveal {
+            position: relative;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: 1s all ease;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .reveal.active { transform: translateY(0); opacity: 1; }
+        .text-gradient {
+            background: linear-gradient(to right, #818cf8, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .form-container {
-            animation: fadeIn 0.5s ease-in-out;
+        .nav-button {
+            transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+            background-color: #f5f3ff; /* violet-50 */
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="min-h-screen">
 
-    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden">
-        
-        <!-- Bagian Kiri: Branding & Gambar -->
-        <div class="w-full md:w-1/2 p-8 md:p-12 text-white bg-cover bg-center" style="background-image: linear-gradient(rgba(20, 30, 48, 0.7), rgba(36, 59, 85, 0.7)), url('https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop');">
-            <div class="flex items-center gap-4 mb-6">
-                <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-14 w-14 bg-white p-1 rounded-full">
-                <div class="h-14 w-14 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
-                    <span class="text-xs font-semibold text-white/80 text-center">EC Logo</span>
+    <!-- ========================================================== -->
+    <!-- == BAGIAN UNTUK PENGUNJUNG UMUM (BELUM LOGIN)           == -->
+    <!-- ========================================================== -->
+    <div id="public-view">
+        <!-- HEADER PALING ATAS -->
+        <header class="bg-white/90 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+            <div class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+                <a href="./index.html" class="flex items-center gap-3">
+                    <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-12 w-12">
+                    <span class="text-xl font-bold text-blue-700">English Court</span>
+                </a>
+                <a href="./login.html" class="bg-blue-600 text-white font-bold px-5 py-2 rounded-lg hover:bg-blue-700 transition-all shadow-md">
+                    Login / Gabung
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <!-- BACKGROUND (HERO SECTION) -->
+            <section class="relative h-[50vh] md:h-[60vh] bg-cover bg-center text-white flex items-center justify-center" style="background-image: linear-gradient(rgba(10, 20, 40, 0.5), rgba(10, 20, 40, 0.5)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto-format&fit=crop');">
+                <div class="text-center p-4">
+                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Level Up Your English.</h1>
+                    <h2 class="text-4xl md:text-6xl font-extrabold text-violet-300">Unleash Your Confidence.</h2>
+                </div>
+            </section>
+
+            <!-- NAVBAR BARU YANG LEBIH FUN -->
+            <nav class="bg-white shadow-lg -mt-16 relative z-30 mx-4 md:mx-auto max-w-5xl rounded-2xl p-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 items-center">
+                    <!-- Logo di Navbar -->
+                    <a href="./index.html" class="col-span-2 lg:col-span-1 flex items-center gap-3 justify-center md:justify-start p-3">
+                        <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-12 w-12">
+                        <div>
+                            <p class="font-bold text-blue-700">English Court</p>
+                            <p class="text-xs text-slate-500">SMAN 3 Lamongan</p>
+                        </div>
+                    </a>
+                    <!-- Tombol Navigasi -->
+                    <a href="#about" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
+                        <span class="text-3xl">🧐</span>
+                        <p class="font-semibold text-slate-700">Tentang Kami</p>
+                    </a>
+                    <a href="#programs" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
+                        <span class="text-3xl">🚀</span>
+                        <p class="font-semibold text-slate-700">Program</p>
+                    </a>
+                    <a href="./login.html" class="nav-button text-center p-4 rounded-lg bg-violet-500 text-white hover:bg-violet-600 flex flex-col items-center gap-2">
+                        <span class="text-3xl">👋</span>
+                        <p class="font-bold">Gabung!</p>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Tentang Kami -->
+            <section id="about" class="pt-20 pb-10 bg-white">
+                <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                    <div class="reveal">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto-format&fit=crop" class="rounded-2xl shadow-2xl w-full">
+                    </div>
+                    <div class="reveal">
+                        <h2 class="text-3xl font-bold text-slate-800">Bukan Sekadar Ekskul Biasa.</h2>
+                        <p class="text-slate-500 mt-4 text-lg">English Court adalah wadah bagi para siswa SMAN 3 Lamongan untuk tidak hanya belajar, tapi juga hidup dengan Bahasa Inggris. Kami percaya, kemampuan berbahasa adalah jembatan menuju dunia yang lebih luas.</p>
+                        <p class="mt-4 text-slate-600">Di sini, kamu akan menemukan teman, mentor, dan tantangan yang akan mendorongmu keluar dari zona nyaman dan menjadi versi terbaik dari dirimu.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Program Unggulan -->
+            <section id="programs" class="py-20 bg-slate-50">
+                <div class="container mx-auto px-6 text-center">
+                    <div class="reveal">
+                        <h2 class="text-3xl font-bold text-slate-800">Program Unggulan Kami</h2>
+                        <p class="text-slate-500 mt-2">Dari debat panas hingga karya kreatif, kami punya semuanya.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                        <div class="reveal card-hover bg-white p-8 rounded-xl">
+                            <h3 class="text-2xl font-bold text-gradient">Debate Club</h3>
+                            <p class="mt-2 text-slate-600">Asah argumen, berpikir kritis, dan kuasai seni persuasi dalam sesi debat yang menantang.</p>
+                        </div>
+                        <div class="reveal card-hover bg-white p-8 rounded-xl">
+                            <h3 class="text-2xl font-bold text-gradient">Speech & Storytelling</h3>
+                            <p class="mt-2 text-slate-600">Taklukkan panggung, latih kepercayaan diri, dan pikat audiens dengan ceritamu.</p>
+                        </div>
+                        <div class="reveal card-hover bg-white p-8 rounded-xl">
+                            <h3 class="text-2xl font-bold text-gradient">Creative Writing</h3>
+                            <p class="mt-2 text-slate-600">Tuangkan imajinasimu dalam bentuk puisi, cerita pendek, dan karya sastra lainnya.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer Informatif -->
+        <footer class="bg-slate-800 text-white">
+            <div class="container mx-auto px-6 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="font-bold text-lg">English Court</h3>
+                        <p class="mt-2 text-slate-400 text-sm">SMAN 3 Lamongan</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">Navigasi</h3>
+                        <ul class="mt-2 space-y-2 text-sm">
+                            <li><a href="#about" class="text-slate-400 hover:text-white">Tentang Kami</a></li>
+                            <li><a href="#programs" class="text-slate-400 hover:text-white">Program</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">Kontak</h3>
+                        <p class="mt-2 text-slate-400 text-sm">Jl. Veteran No. 45, Lamongan</p>
+                        <p class="text-slate-400 text-sm">ec.smagala@email.com</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">Media Sosial</h3>
+                        <div class="flex gap-4 mt-2">
+                            <a href="#" class="text-slate-400 hover:text-white">Instagram</a>
+                            <a href="#" class="text-slate-400 hover:text-white">YouTube</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-slate-700 mt-8 pt-6 text-center text-sm text-slate-500">
+                    &copy; 2025 English Court SMAN 3 Lamongan. All Rights Reserved.
                 </div>
             </div>
-            <h1 class="text-4xl font-bold mb-3">English Court</h1>
-            <p class="text-lg font-light text-white/90">SMA Negeri 3 Lamongan</p>
-            <p class="mt-8 border-l-4 border-yellow-400 pl-4 text-white/90">
-                Welcome! Please log in or sign up to continue to your dashboard.
-            </p>
-        </div>
+        </footer>
+    </div>
 
-        <!-- Bagian Kanan: Form Interaktif -->
-        <div class="w-full md:w-1/2 p-8 md:p-12">
+    <!-- ========================================================== -->
+    <!-- == BAGIAN UNTUK ANGGOTA (SUDAH LOGIN)                  == -->
+    <!-- ========================================================== -->
+    <div id="dashboard-view" class="hidden">
+        <header class="bg-white/90 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+            <nav class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+                <a href="./index.html" class="flex items-center gap-3">
+                    <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-12 w-12">
+                    <span class="text-xl font-bold text-blue-700">English Court</span>
+                </a>
+                <div class="relative">
+                    <button id="profile-button" class="flex items-center gap-2 group">
+                        <div class="hidden sm:block text-right">
+                            <p class="font-semibold text-sm text-slate-700" id="user-email-display">Memuat...</p>
+                        </div>
+                        <img id="profile-avatar" src="https://placehold.co/40x40/dbeafe/4338ca?text=U" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-slate-200 group-hover:border-blue-400 transition object-cover">
+                    </button>
+                    <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-20 py-1">
+                        <a href="./profil.html" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">Profil Saya</a>
+                        <div class="border-t border-slate-100 my-1"></div>
+                        <a href="#" id="logout-button" class="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
 
-            <!-- Container Form Login -->
-            <div id="login-view" class="form-container">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">Login</h2>
-                <p class="text-slate-500 mb-8">Selamat datang kembali!</p>
-                <form id="login-form" class="space-y-5">
-                    <div>
-                        <label for="login-email" class="block text-sm font-medium text-slate-600 mb-1">Email</label>
-                        <input id="login-email" type="email" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="nama@email.com">
-                    </div>
-                    <div>
-                        <label for="login-password" class="block text-sm font-medium text-slate-600 mb-1">Password</label>
-                        <input id="login-password" type="password" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="••••••••">
-                    </div>
-                    <div id="login-error" class="hidden text-red-600 text-sm"></div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-300">Login</button>
-                </form>
-                <p class="text-center text-sm text-slate-500 mt-6">
-                    Belum punya akun?
-                    <a href="#" id="show-signup-link" class="font-semibold text-blue-600 hover:underline">Daftar di sini</a>
-                </p>
+        <main class="container mx-auto px-4 sm:px-6 py-8">
+            <div class="bg-white p-6 sm:p-8 rounded-xl shadow-md mb-8">
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800" id="welcome-message">Selamat Datang!</h1>
+                <p class="text-slate-600 mt-2">Ini adalah dasbor utamamu. Semua yang kamu butuhkan ada di sini.</p>
             </div>
-
-            <!-- Container Form Sign Up -->
-            <div id="signup-view" class="form-container hidden">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">Create Account</h2>
-                <p class="text-slate-500 mb-8">Buat akun baru untuk bergabung.</p>
-                <form id="signup-form" class="space-y-5">
-                    <div>
-                        <label for="signup-email" class="block text-sm font-medium text-slate-600 mb-1">Email</label>
-                        <input id="signup-email" type="email" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="nama@email.com">
-                    </div>
-                    <div>
-                        <label for="signup-password" class="block text-sm font-medium text-slate-600 mb-1">Password</label>
-                        <input id="signup-password" type="password" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Minimal 6 karakter">
-                    </div>
-                    <div id="signup-error" class="hidden text-red-600 text-sm"></div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-300">Daftar</button>
-                </form>
-                <p class="text-center text-sm text-slate-500 mt-6">
-                    Sudah punya akun?
-                    <a href="#" id="show-login-link" class="font-semibold text-blue-600 hover:underline">Login di sini</a>
-                </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="./materi.html" class="card-hover block bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold text-blue-700">📚 Materi Belajar</h3>
+                    <p class="text-slate-500 mt-1 text-sm">Akses semua modul dan catatan pertemuan.</p>
+                </a>
+                <a href="./tugas.html" class="card-hover block bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold text-green-700">📝 Kumpul Tugas</h3>
+                    <p class="text-slate-500 mt-1 text-sm">Lihat daftar tugas dan unggah pekerjaanmu.</p>
+                </a>
+                <a href="./pengumuman.html" class="card-hover block bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold text-yellow-700">📢 Pengumuman</h3>
+                    <p class="text-slate-500 mt-1 text-sm">Informasi terbaru seputar kegiatan EC.</p>
+                </a>
+                <a href="./profil.html" class="card-hover block bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold text-purple-700">👤 Profil Saya</h3>
+                    <p class="text-slate-500 mt-1 text-sm">Lihat dan atur informasi akun Anda.</p>
+                </a>
             </div>
-
-            <!-- Container Notifikasi Verifikasi Email -->
-            <div id="verification-view" class="form-container hidden text-center">
-                <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                <h2 class="text-2xl font-bold text-slate-800 mt-4">Pendaftaran Berhasil!</h2>
-                <p class="text-slate-600 mt-2">Satu langkah lagi. Kami telah mengirimkan link verifikasi ke email Anda. Silakan periksa kotak masuk (atau spam) dan klik link tersebut untuk mengaktifkan akun Anda.</p>
-                <button id="back-to-login-button" class="mt-6 w-full bg-slate-200 text-slate-800 font-bold py-3 rounded-lg hover:bg-slate-300 transition-colors">Kembali ke Login</button>
-            </div>
-
-        </div>
+        </main>
     </div>
 
     <script>
@@ -118,76 +230,68 @@
             const { createClient } = supabase;
             const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Mengambil semua elemen interaktif dari HTML
-            const loginView = document.getElementById('login-view');
-            const signupView = document.getElementById('signup-view');
-            const verificationView = document.getElementById('verification-view');
+            const publicView = document.getElementById('public-view');
+            const dashboardView = document.getElementById('dashboard-view');
             
-            const loginForm = document.getElementById('login-form');
-            const signupForm = document.getElementById('signup-form');
-            
-            const showSignupLink = document.getElementById('show-signup-link');
-            const showLoginLink = document.getElementById('show-login-link');
-            const backToLoginButton = document.getElementById('back-to-login-button');
-
-            const loginErrorDiv = document.getElementById('login-error');
-            const signupErrorDiv = document.getElementById('signup-error');
-
-            // --- FUNGSI UNTUK MENGATUR TAMPILAN ---
-            function showView(viewToShow) {
-                // Sembunyikan semua tampilan dulu
-                loginView.classList.add('hidden');
-                signupView.classList.add('hidden');
-                verificationView.classList.add('hidden');
-                // Tampilkan yang diminta
-                viewToShow.classList.remove('hidden');
+            async function checkUserSession() {
+                const { data, error } = await supabaseClient.auth.getSession();
+                if (data.session) {
+                    publicView.classList.add('hidden');
+                    dashboardView.classList.remove('hidden');
+                    setupDashboard(data.session.user);
+                } else {
+                    publicView.classList.remove('hidden');
+                    dashboardView.classList.add('hidden');
+                }
             }
 
-            // --- EVENT LISTENER UNTUK NAVIGASI ANTAR TAMPILAN ---
-            showSignupLink.addEventListener('click', (e) => { e.preventDefault(); showView(signupView); });
-            showLoginLink.addEventListener('click', (e) => { e.preventDefault(); showView(loginView); });
-            backToLoginButton.addEventListener('click', (e) => { e.preventDefault(); showView(loginView); });
+            function setupDashboard(user) {
+                const userEmailDisplay = document.getElementById('user-email-display');
+                const welcomeMessage = document.getElementById('welcome-message');
+                const logoutButton = document.getElementById('logout-button');
+                const profileButton = document.getElementById('profile-button');
+                const profileDropdown = document.getElementById('profile-dropdown');
 
-            // --- LOGIKA FORM SIGN UP ---
-            signupForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                const email = document.getElementById('signup-email').value;
-                const password = document.getElementById('signup-password').value;
-                signupErrorDiv.classList.add('hidden');
+                const userEmail = user.email;
+                userEmailDisplay.textContent = userEmail;
+                const username = userEmail.split('@')[0];
+                welcomeMessage.textContent = `Welcome back, ${username}!`;
 
-                const { data, error } = await supabaseClient.auth.signUp({ email, password });
+                logoutButton.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    await supabaseClient.auth.signOut();
+                    window.location.reload();
+                });
 
-                if (error) {
-                    signupErrorDiv.textContent = error.message;
-                    signupErrorDiv.classList.remove('hidden');
-                } else {
-                    // Jika pendaftaran berhasil, tampilkan halaman notifikasi verifikasi
-                    showView(verificationView);
-                    signupForm.reset();
-                }
-            });
-
-            // --- LOGIKA FORM LOGIN ---
-            loginForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                loginErrorDiv.classList.add('hidden');
-
-                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-                if (error) {
-                    if (error.message.includes("Email not confirmed")) {
-                        loginErrorDiv.textContent = 'Akun Anda belum diverifikasi. Silakan cek email Anda.';
-                    } else {
-                        loginErrorDiv.textContent = 'Login gagal. Periksa kembali email dan password Anda.';
+                profileButton.addEventListener('click', () => {
+                    profileDropdown.classList.toggle('hidden');
+                });
+                
+                window.addEventListener('click', (e) => {
+                    if (profileButton && !profileButton.contains(e.target) && profileDropdown && !profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.add('hidden');
                     }
-                    loginErrorDiv.classList.remove('hidden');
-                } else {
-                    // Jika login berhasil, arahkan ke halaman beranda
-                    window.location.href = './beranda.html'; 
+                });
+            }
+
+            function revealOnScroll() {
+                const reveals = document.querySelectorAll('.reveal');
+                for (let i = 0; i < reveals.length; i++) {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = reveals[i].getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveals[i].classList.add('active');
+                    } else {
+                        reveals[i].classList.remove('active');
+                    }
                 }
-            });
+            }
+
+            window.addEventListener('scroll', revealOnScroll);
+
+            checkUserSession();
+            revealOnScroll();
         });
     </script>
 </body>
