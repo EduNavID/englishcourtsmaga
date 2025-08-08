@@ -109,17 +109,14 @@
             const { createClient } = supabase;
             const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Elemen-elemen DOM
             const chatContainer = document.getElementById('chat-container');
             const chatForm = document.getElementById('chat-form');
-            const messageInput = document.getElementById('message-input');
             const attachFileButton = document.getElementById('attach-file-button');
             const fileInput = document.getElementById('file-input');
             const recordButton = document.getElementById('record-button');
             const sendButton = document.getElementById('send-button');
             const inputArea = document.getElementById('input-area');
             
-            // Variabel state
             let currentUserEmail = '';
             let mediaRecorder;
             let audioChunks = [];
@@ -190,11 +187,8 @@
                     recordButton.classList.remove('bg-red-200');
                     sendButton.disabled = false;
                     attachFileButton.disabled = false;
-                    // Re-assign messageInput element
                     document.getElementById('message-input').addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter') {
-                            chatForm.requestSubmit();
-                        }
+                        if (e.key === 'Enter') chatForm.requestSubmit();
                     });
                 }
             }
@@ -204,22 +198,13 @@
             // =================================================================
             async function fetchMessages() {
                 chatContainer.innerHTML = '';
-                const { data: messages, error } = await supabaseClient
-                    .from('messages')
-                    .select('*')
-                    .order('created_at', { ascending: true });
-
-                if (error) {
-                    console.error('Error fetching messages:', error);
-                } else {
-                    messages.forEach(displayMessage);
-                }
+                const { data: messages, error } = await supabaseClient.from('messages').select('*').order('created_at', { ascending: true });
+                if (error) console.error('Error fetching messages:', error);
+                else messages.forEach(displayMessage);
             }
 
             async function sendMessage(content, message_type = 'text', file_url = null) {
-                const { error } = await supabaseClient
-                    .from('messages')
-                    .insert({ content, user_email: currentUserEmail, message_type, file_url });
+                const { error } = await supabaseClient.from('messages').insert({ content, user_email: currentUserEmail, message_type, file_url });
                 if (error) {
                     console.error('Error sending message:', error);
                     alert('Gagal mengirim pesan.');
@@ -227,12 +212,9 @@
             }
 
             function listenForNewMessages() {
-                supabaseClient
-                    .channel('public:messages')
-                    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
-                        displayMessage(payload.new);
-                    })
-                    .subscribe();
+                supabaseClient.channel('public:messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+                    displayMessage(payload.new);
+                }).subscribe();
             }
 
             async function uploadFile(file, type) {
@@ -240,17 +222,18 @@
                 const fileName = `${currentUserEmail.split('@')[0]}-${Date.now()}.${fileExt}`;
                 const filePath = `${fileName}`;
 
+                // =================================================================
+                // == PERHATIKAN BAGIAN INI! ==
+                // Pastikan nama bucket di sini ('media-chat') SAMA PERSIS dengan
+                // nama bucket yang Anda buat di dashboard Supabase.
+                // =================================================================
                 const { error: uploadError } = await supabaseClient.storage
-                    .from('chat_media')
+                    .from('media-chat') // <-- GANTI NAMA INI JIKA PERLU
                     .upload(filePath, file);
 
-                if (uploadError) {
-                    throw uploadError;
-                }
+                if (uploadError) throw uploadError;
 
-                const { data: urlData } = supabaseClient.storage
-                    .from('chat_media')
-                    .getPublicUrl(filePath);
+                const { data: urlData } = supabaseClient.storage.from('media-chat').getPublicUrl(filePath); // <-- GANTI NAMA INI JUGA
                 
                 await sendMessage(`Mengirim ${type}...`, type, urlData.publicUrl);
             }
@@ -272,7 +255,6 @@
                 });
 
                 attachFileButton.addEventListener('click', () => fileInput.click());
-
                 fileInput.addEventListener('change', async (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
@@ -281,15 +263,12 @@
                     } catch (error) {
                         alert('Gagal mengunggah gambar: ' + error.message);
                     }
-                    fileInput.value = ''; // Reset input
+                    fileInput.value = '';
                 });
 
                 recordButton.addEventListener('click', () => {
-                    if (isRecording) {
-                        mediaRecorder.stop();
-                    } else {
-                        startRecording();
-                    }
+                    if (isRecording) mediaRecorder.stop();
+                    else startRecording();
                 });
             }
 
@@ -303,10 +282,7 @@
                     mediaRecorder.start();
                     updateRecordingUI(true);
 
-                    mediaRecorder.addEventListener("dataavailable", event => {
-                        audioChunks.push(event.data);
-                    });
-
+                    mediaRecorder.addEventListener("dataavailable", event => audioChunks.push(event.data));
                     mediaRecorder.addEventListener("stop", async () => {
                         const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                         const audioFile = new File([audioBlob], "voice-note.webm", { type: 'audio/webm' });
@@ -317,7 +293,7 @@
                         }
                         audioChunks = [];
                         updateRecordingUI(false);
-                        stream.getTracks().forEach(track => track.stop()); // Stop microphone access
+                        stream.getTracks().forEach(track => track.stop());
                     });
                 } catch (error) {
                     alert("Tidak bisa mengakses mikrofon. Pastikan Anda memberikan izin.");
