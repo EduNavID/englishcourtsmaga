@@ -1,0 +1,33 @@
+document.addEventListener('DOMContentLoaded', async () => {
+    // Ambil kata kunci dari URL
+    const params = new URLSearchParams(window.location.search);
+    const searchTerm = params.get('q');
+    
+    document.getElementById('search-term-display').textContent = searchTerm;
+    const resultsContainer = document.getElementById('results-container');
+
+    // Panggil fungsi 'search_content' yang kita buat di Supabase
+    const { data, error } = await supabaseClient
+        .rpc('search_content', { search_term: searchTerm });
+
+    if (error || data.length === 0) {
+        resultsContainer.innerHTML = '<p>Tidak ada hasil yang ditemukan.</p>';
+        return;
+    }
+
+    // Kosongkan tulisan "Mencari..."
+    resultsContainer.innerHTML = '';
+
+    // Tampilkan setiap hasil dalam bentuk kartu
+    data.forEach(result => {
+        const resultCard = document.createElement('a');
+        resultCard.href = result.url;
+        resultCard.className = 'block bg-white p-4 rounded-lg shadow hover:bg-slate-50';
+        resultCard.innerHTML = `
+            <p class="text-sm font-semibold text-blue-600">${result.type}</p>
+            <h3 class="text-xl font-bold">${result.title}</h3>
+            <p class="text-slate-600 mt-1">${result.snippet}...</p>
+        `;
+        resultsContainer.appendChild(resultCard);
+    });
+});
