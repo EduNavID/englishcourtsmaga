@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Court - SMAN 3 Lamongan</title>
+    <title>Beranda - English Court SMAN 3 Lamongan</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,324 +12,317 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display.swap" rel="stylesheet">
     
     <style>
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
-        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
         }
-        .reveal {
+        .hero-section {
+            background-color: #0093E9;
+            background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+        }
+        .nav-icon-button {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .nav-icon-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+        .article-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+        .slider-container {
             position: relative;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: 1s all ease;
+            overflow: hidden;
         }
-        .reveal.active { transform: translateY(0); opacity: 1; }
-        .nav-button {
-            transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
         }
-        .nav-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
-            background-color: #f5f3ff;
+        .slider-slide {
+            min-width: 100%;
         }
-        /* Style untuk Slider */
-        .slider-container { position: relative; overflow: hidden; }
-        .slider-track { display: flex; transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
-        .slider-slide { min-width: 100%; box-sizing: border-box; }
         @media (min-width: 768px) {
-            .announcement-slide { min-width: 33.33%; }
-        }
-        /* Animasi untuk Modal Pencarian */
-        @keyframes modal-in {
-            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .modal-content {
-            animation: modal-in 0.3s ease-out forwards;
-        }
-        /* VISUAL BARU: Gradien Latar Belakang */
-        .hero-gradient-bg {
-             background: linear-gradient(45deg, #4f46e5, #7c3aed, #db2777);
+            .slider-slide {
+                min-width: 50%;
+            }
         }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- Header Adaptif -->
-    <header class="bg-white/90 backdrop-blur-lg shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
-            <a href="./index.html" class="flex items-center gap-3">
-                <img src="https://i.imgur.com/kLMVg0W.png" alt="Logo SMAN 3 Lamongan" class="h-12 w-12">
-                <span class="text-xl font-bold text-blue-700">English Court</span>
-            </a>
-            <div class="flex items-center gap-4">
-                <button id="search-button" class="p-2 rounded-full hover:bg-slate-200 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                </button>
-                
-                <!-- Tombol Login untuk Pengunjung (Default) -->
-                <a id="guest-login-button" href="./login.html" class="bg-blue-600 text-white font-bold px-5 py-2 rounded-lg hover:bg-blue-700 transition-all shadow-md hidden">
-                    Login / Gabung
-                </a>
-
-                <!-- Menu Profil untuk Anggota (Awalnya tersembunyi) -->
-                <div id="user-profile-area" class="relative hidden">
-                    <button id="profile-button" class="flex items-center gap-2 group">
-                        <div class="hidden sm:block text-right">
-                            <p class="font-semibold text-sm text-slate-700" id="user-email-display">Memuat...</p>
-                        </div>
-                        <img id="profile-avatar" src="https://placehold.co/40x40/dbeafe/4338ca?text=U" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-slate-200 group-hover:border-blue-400 transition object-cover">
-                    </button>
-                    <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-20 py-1">
-                        <a href="./profil.html" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">Profil Saya</a>
-                        <a href="./setting.html" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">
-                            <svg class="w-5 h-5 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.438.995s.145.755.438.995l1.003.827c.48.398.668 1.03.26 1.431l-1.296 2.247a1.125 1.125 0 01-1.37.49l-1.217-.456c-.355-.133-.75-.072-1.075.124a6.57 6.57 0 01-.22.127c-.332.183-.582.495-.645.87l-.213 1.281c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.063-.374-.313-.686-.645-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.37-.49l-1.296-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.437-.995s-.145-.755-.437-.995l-1.004-.827a1.125 1.125 0 01-.26-1.431l1.296-2.247a1.125 1.125 0 011.37-.49l1.217.456c.355.133.75.072 1.076-.124.072-.044.146-.087.22-.127.332-.183.582-.495.645-.87l.213-1.28z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                            <span>Pengaturan</span>
-                        </a>
-                        <div class="border-t border-slate-100 my-1"></div>
-                        <a href="#" id="logout-button" class="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</a>
+    <!-- Header Utama -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="./index.html" class="flex items-center gap-3">
+                    <img src="https://i.imgur.com/dI8zJmf.png="Logo SMAN 3 Lamongan" class="h-12 w-12">
+                    <div class="hidden sm:block">
+                        <p class="font-bold text-blue-700 text-lg">English Court</p>
+                        <p class="text-xs text-slate-500 -mt-1">SMAN 3 Lamongan</p>
                     </div>
-                </div>
+                </a>
+                
+                <!-- Navigasi Desktop -->
+                <nav class="hidden md:flex items-center space-x-6 font-semibold">
+                    <a href="./index.html" class="text-blue-600">Beranda</a>
+                    <a href="./profil.html" class="text-slate-600 hover:text-blue-600 transition-colors">Profil</a>
+                    <a href="./artikel.html" class="text-slate-600 hover:text-blue-600 transition-colors">Artikel</a>
+                    <a href="./informasi.html" class="text-slate-600 hover:text-blue-600 transition-colors">Informasi</a>
+                    <a href="./kontak.html" class="text-slate-600 hover:text-blue-600 transition-colors">Kontak</a>
+                </nav>
+
+                <!-- Tombol Masuk -->
+                <a href="./login.html" class="bg-slate-100 text-slate-700 font-semibold px-6 py-2 rounded-lg hover:bg-slate-200 transition-colors shadow-sm border border-slate-200">
+                    Masuk
+                </a>
             </div>
-        </nav>
+        </div>
     </header>
 
     <main>
-        <!-- BACKGROUND (HERO SECTION) -->
-        <section class="relative h-[50vh] md:h-[60vh] bg-cover bg-center text-white flex items-center justify-center hero-gradient-bg">
-            <div class="text-center p-4">
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Level Up Your English.</h1>
-                <h2 class="text-4xl md:text-6xl font-extrabold text-slate-300">Unleash Your Confidence.</h2>
+        <!-- Hero Section -->
+        <section class="hero-section text-white pt-12 pb-20 overflow-hidden">
+            <div class="container mx-auto px-4 sm:px-6">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <!-- Kolom Kiri: Teks dan Pencarian -->
+                    <div class="space-y-6">
+                        <p class="font-semibold text-lg">Official Website of English Court</p>
+                        <h1 class="text-5xl lg:text-6xl font-extrabold tracking-tight">LEVEL UP YOUR ENGLISH</h1>
+                        <div class="relative">
+                            <input type="text" placeholder="Cari informasi kegiatan, materi, atau pengumuman..." class="w-full py-4 pl-5 pr-12 rounded-full text-slate-800 focus:ring-2 focus:ring-blue-400 border-0">
+                            <button class="absolute top-1/2 right-3 -translate-y-1/2 bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                            </button>
+                        </div>
+                        <p class="text-lg italic opacity-90">"The limits of my language mean the limits of my world." - Ludwig Wittgenstein</p>
+                    </div>
+                    <!-- Kolom Kanan: Gambar -->
+                    <div class="hidden md:block relative h-full">
+                         <img src="https://i.imgur.com/dI8zJmf.png">
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- NAVBAR -->
-        <nav class="bg-white shadow-lg -mt-16 relative z-30 mx-4 md:mx-auto max-w-6xl rounded-2xl p-4">
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-2 items-center">
-                <a href="./index.html" class="nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
-                    <span class="text-3xl">🏠</span>
-                    <p class="font-semibold text-slate-700">Beranda</p>
-                </a>
-                <a href="./materi.html" class="requires-login nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
-                    <span class="text-3xl">📚</span>
-                    <p class="font-semibold text-slate-700">Materi</p>
-                </a>
-                <a href="./informasi.html" class="requires-login nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
-                    <span class="text-3xl">💡</span>
-                    <p class="font-semibold text-slate-700">Informasi</p>
-                </a>
-                <a href="./dokumentasi.html" class="requires-login nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
-                    <span class="text-3xl">📸</span>
-                    <p class="font-semibold text-slate-700">Dokumentasi</p>
-                </a>
-                <a href="./pengumuman.html" class="requires-login nav-button text-center p-4 rounded-lg flex flex-col items-center gap-2">
-                    <span class="text-3xl">📢</span>
-                    <p class="font-semibold text-slate-700">Pengumuman</p>
-                </a>
+        <!-- Navbar Ikon -->
+        <nav class="bg-white shadow-lg -mt-12 relative z-30 mx-4 md:mx-auto max-w-6xl rounded-2xl p-4">
+            <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-10 gap-4 text-center">
+                <a href="./sambutan.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🏠</span><p class="text-sm font-semibold mt-1">Sambutan</p></a>
+                <a href="./visimisi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🎯</span><p class="text-sm font-semibold mt-1">Visi & Misi</p></a>
+                <a href="./materi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">📚</span><p class="text-sm font-semibold mt-1">Materi</p></a>
+                <a href="./tugas.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">📝</span><p class="text-sm font-semibold mt-1">Tugas</p></a>
+                <a href="./dokumentasi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">📸</span><p class="text-sm font-semibold mt-1">Dokumentasi</p></a>
+                <a href="./anggota.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">👩‍🏫</span><p class="text-sm font-semibold mt-1">Anggota</p></a>
+                <a href="./agenda.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🗓️</span><p class="text-sm font-semibold mt-1">Agenda</p></a>
+                <a href="./pengumuman.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">📢</span><p class="text-sm font-semibold mt-1">Pengumuman</p></a>
+                <a href="./alumni.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🎓</span><p class="text-sm font-semibold mt-1">Alumni</p></a>
+                <a href="./prestasi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🏆</span><p class="text-sm font-semibold mt-1">Prestasi</p></a>
             </div>
         </nav>
 
-        <!-- Info Singkat EC SMAGA -->
-        <section class="pt-20 pb-10 bg-white">
-            <div class="container mx-auto px-6 text-center">
-                <div class="reveal">
-                    <h2 class="text-3xl font-bold text-slate-800">Welcome to English Court!</h2>
-                    <p class="text-slate-500 mt-4 text-lg max-w-3xl mx-auto">Kami adalah komunitas siswa SMAN 3 Lamongan yang bersemangat untuk menguasai Bahasa Inggris. Lebih dari sekadar ekskul, kami adalah keluarga yang belajar, berkompetisi, dan bertumbuh bersama.</p>
+        <!-- Artikel & Berita -->
+        <section class="py-20 bg-slate-50">
+            <div class="container mx-auto px-6">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800">Artikel & Berita Klub</h2>
+                    <a href="./artikel.html" class="font-semibold text-blue-600 hover:underline">Lihat Semua ></a>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Template Artikel 1 -->
+                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-4">
+                            <p class="text-sm text-blue-500 font-semibold">Berita</p>
+                            <h3 class="font-bold mt-1 text-slate-800 group-hover:text-blue-600 transition-colors">EC Sabet Juara 1 Lomba Debat Nasional</h3>
+                            <p class="text-xs text-slate-500 mt-2">18 Juli 2025</p>
+                        </div>
+                    </a>
+                    <!-- Template Artikel 2 -->
+                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-4">
+                            <p class="text-sm text-blue-500 font-semibold">Artikel</p>
+                            <h3 class="font-bold mt-1 text-slate-800 group-hover:text-blue-600 transition-colors">5 Tips Jitu Public Speaking untuk Pemula</h3>
+                            <p class="text-xs text-slate-500 mt-2">15 Juli 2025</p>
+                        </div>
+                    </a>
+                    <!-- Template Artikel 3 -->
+                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2c657768cd91?q=80&w=2070&auto=format&fit=crop" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-4">
+                            <p class="text-sm text-blue-500 font-semibold">Berita</p>
+                            <h3 class="font-bold mt-1 text-slate-800 group-hover:text-blue-600 transition-colors">Kunjungan Studi dari Sekolah Internasional</h3>
+                            <p class="text-xs text-slate-500 mt-2">12 Juli 2025</p>
+                        </div>
+                    </a>
+                    <!-- Template Artikel 4 -->
+                    <a href="#" class="article-card bg-white rounded-lg shadow-md overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-4">
+                            <p class="text-sm text-blue-500 font-semibold">Artikel</p>
+                            <h3 class="font-bold mt-1 text-slate-800 group-hover:text-blue-600 transition-colors">Cara Menulis Esai yang Memukau</h3>
+                            <p class="text-xs text-slate-500 mt-2">10 Juli 2025</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Preview Pengumuman (SLIDER) -->
-        <section class="py-20 bg-slate-50">
+        <!-- Agenda & Pengumuman -->
+        <section class="py-20 bg-white">
             <div class="container mx-auto px-6">
-                <div class="reveal text-center">
-                    <h2 class="text-3xl font-bold text-slate-800">Pengumuman Terkini</h2>
-                    <p class="text-slate-500 mt-2">Jangan sampai ketinggalan informasi penting seputar kegiatan kita!</p>
-                </div>
-                <div class="mt-12 reveal slider-container max-w-6xl mx-auto">
-                    <div id="announcement-track" class="slider-track">
-                        <div class="slider-slide announcement-slide p-4"><div class="card-hover bg-white p-6 rounded-xl h-full"><p class="text-sm text-violet-600 font-semibold">10 Agu 2025</p><h3 class="text-xl font-bold mt-2">Jadwal Pertemuan Pekan Ini</h3><p class="mt-2 text-slate-600">Pertemuan rutin pekan ini akan diadakan pada hari Sabtu, pukul 14:00 di Ruang Multimedia untuk persiapan lomba...</p></div></div>
-                        <div class="slider-slide announcement-slide p-4"><div class="card-hover bg-white p-6 rounded-xl h-full"><p class="text-sm text-violet-600 font-semibold">08 Agu 2025</p><h3 class="text-xl font-bold mt-2">Pendaftaran Lomba Debat Internal</h3><p class="mt-2 text-slate-600">Segera daftarkan tim kalian untuk kompetisi debat internal EC! Pendaftaran ditutup tanggal 15 Agustus...</p></div></div>
-                        <div class="slider-slide announcement-slide p-4"><div class="card-hover bg-white p-6 rounded-xl h-full"><p class="text-sm text-violet-600 font-semibold">05 Agu 2025</p><h3 class="text-xl font-bold mt-2">Pembicara Tamu dari Australia</h3><p class="mt-2 text-slate-600">Jangan lewatkan sesi spesial bersama Mr. David Smith, seorang native speaker yang akan berbagi tips...</p></div></div>
+                <!-- Agenda -->
+                <div class="mb-16">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-3xl font-bold text-slate-800">Agenda Kegiatan</h2>
+                        <a href="./agenda.html" class="font-semibold text-blue-600 hover:underline">Lihat Semua Agenda ></a>
                     </div>
-                </div>
-            </section>
-
-            <!-- Dokumentasi Terkini (SLIDER) -->
-            <section class="py-20 bg-white">
-                <div class="container mx-auto px-6 text-center">
-                    <div class="reveal">
-                        <h2 class="text-3xl font-bold text-slate-800">Dokumentasi Terkini</h2>
-                        <p class="text-slate-500 mt-2">Momen-momen seru yang berhasil kami abadikan.</p>
-                    </div>
-                    <div class="mt-12 reveal slider-container rounded-xl shadow-lg max-w-4xl mx-auto">
-                        <div id="docs-track" class="slider-track aspect-video">
-                            <div class="slider-slide"><img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2232&auto=format&fit=crop" class="w-full h-full object-cover"></div>
-                            <div class="slider-slide"><img src="https://images.unsplash.com/photo-1531482615713-2c657768cd91?q=80&w=2070&auto-format&fit=crop" class="w-full h-full object-cover"></div>
-                            <div class="slider-slide"><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto-format&fit=crop" class="w-full h-full object-cover"></div>
-                            <div class="slider-slide"><img src="https://images.unsplash.com/photo-1543269664-56d93c1b41a6?q=80&w=2070&auto-format&fit=crop" class="w-full h-full object-cover"></div>
+                    <div class="bg-blue-50 rounded-2xl p-6 slider-container">
+                        <div id="agenda-track" class="slider-track">
+                             <!-- Slide 1 -->
+                            <div class="slider-slide p-4">
+                                <div class="bg-white p-6 rounded-xl h-full flex gap-4">
+                                    <img src="https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?q=80&w=2070&auto=format&fit=crop" class="w-32 h-32 rounded-md object-cover">
+                                    <div>
+                                        <p class="font-bold text-lg">Debate Practice Session</p>
+                                        <p class="text-sm text-slate-600">Sabtu, 12 Agustus 2025</p>
+                                        <p class="text-sm text-slate-500 mt-1">08:00 - 10:00 WIB</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="slider-slide p-4">
+                                <div class="bg-white p-6 rounded-xl h-full flex gap-4">
+                                    <img src="https://images.unsplash.com/photo-1587825140708-df876c1b5df1?q=80&w=2070&auto=format&fit=crop" class="w-32 h-32 rounded-md object-cover">
+                                     <div>
+                                        <p class="font-bold text-lg">Guest Speaker: "Global Mindset"</p>
+                                        <p class="text-sm text-slate-600">Jumat, 18 Agustus 2025</p>
+                                        <p class="text-sm text-slate-500 mt-1">14:00 - 16:00 WIB</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        </main>
-        
-        <footer class="bg-slate-800 text-white">
-            <div class="container mx-auto px-6 py-12">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div>
-                        <h3 class="font-bold text-lg">English Court</h3>
-                        <p class="mt-2 text-slate-400 text-sm">SMAN 3 Lamongan</p>
+                <!-- Pengumuman -->
+                <div>
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-3xl font-bold text-slate-800">Pengumuman</h2>
+                        <a href="./pengumuman.html" class="font-semibold text-blue-600 hover:underline">Lihat Semua ></a>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-lg">Navigasi</h3>
-                        <ul class="mt-2 space-y-2 text-sm">
-                            <li><a href="./informasi.html" class="text-slate-400 hover:text-white">Informasi</a></li>
-                            <li><a href="./dokumentasi.html" class="text-slate-400 hover:text-white">Dokumentasi</a></li>
-                            <li><a href="./pengumuman.html" class="text-slate-400 hover:text-white">Pengumuman</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg">Kontak</h3>
-                        <p class="mt-2 text-slate-400 text-sm">Jl. Veteran No. 45, Lamongan</p>
-                        <p class="text-slate-400 text-sm">ec.smagala@email.com</p>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg">Media Sosial</h3>
-                        <div class="flex gap-4 mt-2">
-                            <a href="#" class="text-slate-400 hover:text-white">Instagram</a>
-                            <a href="#" class="text-slate-400 hover:text-white">YouTube</a>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Template Pengumuman 1 -->
+                        <div class="bg-slate-100 rounded-lg p-4 flex items-center gap-4 hover:bg-slate-200 transition-colors">
+                            <img src="https://placehold.co/100x100/0093E9/FFFFFF?text=EC" class="w-24 h-24 rounded-md object-cover">
+                            <div>
+                                <p class="font-bold">Pertemuan Rutin Pekan Ini</p>
+                                <p class="text-sm text-slate-600">Sabtu, 12 Agustus 2025</p>
+                            </div>
+                        </div>
+                        <!-- Template Pengumuman 2 -->
+                        <div class="bg-slate-100 rounded-lg p-4 flex items-center gap-4 hover:bg-slate-200 transition-colors">
+                            <img src="https://placehold.co/100x100/80D0C7/FFFFFF?text=EC" class="w-24 h-24 rounded-md object-cover">
+                            <div>
+                                <p class="font-bold">Lomba Debat Internal</p>
+                                <p class="text-sm text-slate-600">Pendaftaran Dibuka!</p>
+                            </div>
+                        </div>
+                        <!-- Template Pengumuman 3 -->
+                        <div class="bg-slate-100 rounded-lg p-4 flex items-center gap-4 hover:bg-slate-200 transition-colors">
+                           <img src="https://placehold.co/100x100/0093E9/FFFFFF?text=EC" class="w-24 h-24 rounded-md object-cover">
+                            <div>
+                                <p class="font-bold">Sesi Scrabble & Games</p>
+                                <p class="text-sm text-slate-600">Jumat, 18 Agustus 2025</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="border-t border-slate-700 mt-8 pt-6 text-center text-sm text-slate-500">
-                    &copy; 2025 English Court SMAN 3 Lamongan. All Rights Reserved.
                 </div>
             </div>
-        </footer>
-    
-    <div id="search-modal" class="hidden fixed inset-0 bg-black/60 z-[100] flex justify-center items-start pt-20 p-4">
-        <div class="bg-white w-full max-w-xl rounded-xl shadow-2xl relative modal-content">
-            <input type="text" placeholder="Ketik untuk mencari..." class="w-full p-4 text-lg border-2 border-transparent focus:border-blue-500 focus:ring-0 rounded-xl">
-            <button id="close-search-button" class="absolute top-3 right-3 text-slate-500 hover:text-slate-800">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg">English Court</h3>
+                    <p class="mt-2 text-slate-400 text-sm">SMAN 3 Lamongan</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Menu</h3>
+                    <ul class="mt-2 space-y-2 text-sm">
+                        <li><a href="./profil.html" class="text-slate-400 hover:text-white">Profil</a></li>
+                        <li><a href="./artikel.html" class="text-slate-400 hover:text-white">Artikel</a></li>
+                        <li><a href="./kontak.html" class="text-slate-400 hover:text-white">Kontak</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Hubungi Kami</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Jl. Veteran No. 45, Lamongan</p>
+                    <p class="text-slate-400 text-sm">ec.smagala@email.com</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Ikuti Kami</h3>
+                    <div class="flex gap-4 mt-2">
+                        <a href="#" class="text-slate-400 hover:text-white">Instagram</a>
+                        <a href="#" class="text-slate-400 hover:text-white">YouTube</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-700 mt-8 pt-6 text-center text-sm text-slate-500">
+                &copy; 2025 English Court SMAN 3 Lamongan. All Rights Reserved.
+            </div>
         </div>
-    </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const SUPABASE_URL = 'https://jelcycdbdokcalsuptwm.supabase.co';
-            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ1NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
-            const { createClient } = supabase;
-            const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-
+            // --- FUNGSI SLIDER UNIVERSAL ---
             function setupSlider(trackId, interval) {
                 const track = document.getElementById(trackId);
                 if (!track) return;
+                
                 let slides = Array.from(track.children);
                 if(slides.length <= 1) return;
+
+                // Clone slides for infinite loop effect
                 slides.forEach(slide => track.appendChild(slide.cloneNode(true)));
+                
                 let currentSlide = 0;
                 let slideWidth = slides[0].getBoundingClientRect().width;
+
                 function autoPlay() {
                     currentSlide++;
                     track.style.transition = 'transform 0.7s ease-in-out';
                     track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+
+                    // Reset to beginning without animation when clone ends
                     if (currentSlide >= slides.length) {
                         setTimeout(() => {
                             track.style.transition = 'none';
                             track.style.transform = 'translateX(0)';
                             currentSlide = 0;
-                        }, 700);
+                        }, 700); // Must match transition duration
                     }
                 }
+                
                 setInterval(autoPlay, interval);
+
                 window.addEventListener('resize', () => {
                     slideWidth = slides[0].getBoundingClientRect().width;
                     track.style.transition = 'none';
                     track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
                 });
             }
-            setupSlider('announcement-track', 5000);
-            setupSlider('docs-track', 4000);
 
-            const userProfileArea = document.getElementById('user-profile-area');
-            const guestLoginButton = document.getElementById('guest-login-button');
-
-            async function checkUserSession() {
-                const { data } = await supabaseClient.auth.getSession();
-                if (data.session) {
-                    setupForMember(data.session.user);
-                } else {
-                    setupForGuest();
-                }
-            }
-
-            function setupForMember(user) {
-                guestLoginButton.classList.add('hidden');
-                userProfileArea.classList.remove('hidden');
-                const userEmailDisplay = document.getElementById('user-email-display');
-                const logoutButton = document.getElementById('logout-button');
-                const profileButton = document.getElementById('profile-button');
-                const profileDropdown = document.getElementById('profile-dropdown');
-                userEmailDisplay.textContent = user.email;
-                logoutButton.addEventListener('click', async () => {
-                    await supabaseClient.auth.signOut();
-                    window.location.reload();
-                });
-                profileButton.addEventListener('click', () => profileDropdown.classList.toggle('hidden'));
-                window.addEventListener('click', (e) => {
-                    if (profileButton && !profileButton.contains(e.target) && profileDropdown && !profileDropdown.contains(e.target)) {
-                        profileDropdown.classList.add('hidden');
-                    }
-                });
-            }
-
-            function setupForGuest() {
-                userProfileArea.classList.add('hidden');
-                guestLoginButton.classList.remove('hidden');
-                const restrictedLinks = document.querySelectorAll('.requires-login');
-                restrictedLinks.forEach(link => {
-                    link.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        alert('Anda harus login untuk mengakses fitur ini.');
-                        window.location.href = './login.html';
-                    });
-                });
-            }
-            
-            checkUserSession();
-
-            const searchButton = document.getElementById('search-button');
-            const searchModal = document.getElementById('search-modal');
-            if (searchButton && searchModal) {
-                const closeSearchButton = searchModal.querySelector('button');
-                searchButton.addEventListener('click', () => searchModal.classList.remove('hidden'));
-                if(closeSearchButton) {
-                    closeSearchButton.addEventListener('click', () => searchModal.classList.add('hidden'));
-                }
-                searchModal.addEventListener('click', (e) => {
-                    if(e.target === searchModal) {
-                        searchModal.classList.add('hidden');
-                    }
-                });
-            }
-            function revealOnScroll() {
-                const reveals = document.querySelectorAll('.reveal');
-                for (let i = 0; i < reveals.length; i++) {
-                    const windowHeight = window.innerHeight;
-                    const elementTop = reveals[i].getBoundingClientRect().top;
-                    const elementVisible = 150;
-                    if (elementTop < windowHeight - elementVisible) {
-                        reveals[i].classList.add('active');
-                    }
-                }
-            }
-            window.addEventListener('scroll', revealOnScroll);
-            revealOnScroll();
+            // --- INISIALISASI SLIDER ---
+            setupSlider('agenda-track', 6000);
         });
     </script>
 </body>
