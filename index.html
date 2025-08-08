@@ -128,8 +128,8 @@
                         <p class="font-semibold text-lg">Official Website of English Court</p>
                         <h1 class="text-5xl lg:text-6xl font-extrabold tracking-tight">LEVEL UP YOUR ENGLISH</h1>
                         <div class="relative">
-                            <input type="text" placeholder="Cari informasi kegiatan, materi, atau pengumuman..." class="w-full py-4 pl-5 pr-12 rounded-full text-slate-800 focus:ring-2 focus:ring-blue-400 border-0">
-                            <button class="absolute top-1/2 right-3 -translate-y-1/2 bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors">
+                            <input id="search-input" type="text" placeholder="Cari informasi kegiatan, materi, atau pengumuman..." class="w-full py-4 pl-5 pr-12 rounded-full text-slate-800 focus:ring-2 focus:ring-blue-400 border-0">
+                            <button id="search-submit-button" class="absolute top-1/2 right-3 -translate-y-1/2 bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                             </button>
                         </div>
@@ -145,17 +145,17 @@
 
         <!-- Navbar Ikon -->
         <nav class="bg-white shadow-lg -mt-12 relative z-30 mx-4 md:mx-auto max-w-6xl rounded-2xl p-4 reveal">
-            <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-10 gap-4 text-center">
-                <a href="./sambutan.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🏠</span><p class="text-sm font-semibold mt-1">Sambutan</p></a>
-                <a href="./visimisi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🎯</span><p class="text-sm font-semibold mt-1">Visi & Misi</p></a>
-                <a href="./materi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">📚</span><p class="text-sm font-semibold mt-1">Materi</p></a>
-                <a href="./tugas.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">📝</span><p class="text-sm font-semibold mt-1">Tugas</p></a>
-                <a href="./dokumentasi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">📸</span><p class="text-sm font-semibold mt-1">Dokumentasi</p></a>
-                <a href="./anggota.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">👩‍🏫</span><p class="text-sm font-semibold mt-1">Anggota</p></a>
-                <a href="./agenda.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🗓️</span><p class="text-sm font-semibold mt-1">Agenda</p></a>
-                <a href="./pengumuman.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">📢</span><p class="text-sm font-semibold mt-1">Pengumuman</p></a>
-                <a href="./alumni.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🎓</span><p class="text-sm font-semibold mt-1">Alumni</p></a>
-                <a href="./prestasi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-3xl">🏆</span><p class="text-sm font-semibold mt-1">Prestasi</p></a>
+            <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-10 gap-2 text-center">
+                <a href="./sambutan.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">🏠</span><p class="text-xs sm:text-sm font-semibold mt-1">Sambutan</p></a>
+                <a href="./visimisi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">🎯</span><p class="text-xs sm:text-sm font-semibold mt-1">Visi & Misi</p></a>
+                <a href="./materi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">📚</span><p class="text-xs sm:text-sm font-semibold mt-1">Materi</p></a>
+                <a href="./tugas.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">📝</span><p class="text-xs sm:text-sm font-semibold mt-1">Tugas</p></a>
+                <a href="./dokumentasi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">📸</span><p class="text-xs sm:text-sm font-semibold mt-1">Dokumentasi</p></a>
+                <a href="./anggota.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">👩‍🏫</span><p class="text-xs sm:text-sm font-semibold mt-1">Anggota</p></a>
+                <a href="./agenda.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">🗓️</span><p class="text-xs sm:text-sm font-semibold mt-1">Agenda</p></a>
+                <a href="./pengumuman.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">📢</span><p class="text-xs sm:text-sm font-semibold mt-1">Pengumuman</p></a>
+                <a href="./alumni.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">🎓</span><p class="text-xs sm:text-sm font-semibold mt-1">Alumni</p></a>
+                <a href="./prestasi.html" class="nav-icon-button p-3 rounded-lg"><span class="text-2xl sm:text-3xl">🏆</span><p class="text-xs sm:text-sm font-semibold mt-1">Prestasi</p></a>
             </div>
         </nav>
 
@@ -320,6 +320,16 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
     </a>
 
+    <!-- Modal Pencarian -->
+    <div id="search-modal" class="hidden fixed inset-0 bg-black/60 z-[100] flex justify-center items-start pt-20 p-4">
+        <div class="bg-white w-full max-w-xl rounded-xl shadow-2xl relative modal-content">
+            <input type="text" placeholder="Ketik untuk mencari..." class="w-full p-4 text-lg border-2 border-transparent focus:border-blue-500 focus:ring-0 rounded-xl">
+            <button id="close-search-button" class="absolute top-3 right-3 text-slate-500 hover:text-slate-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const SUPABASE_URL = 'https://jelcycdbdokcalsuptwm.supabase.co';
@@ -407,6 +417,22 @@
             }
             
             checkUserSession();
+
+            // --- LOGIKA MODAL PENCARIAN ---
+            const searchButton = document.getElementById('search-button');
+            const searchModal = document.getElementById('search-modal');
+            if (searchButton && searchModal) {
+                const closeSearchButton = searchModal.querySelector('button');
+                searchButton.addEventListener('click', () => searchModal.classList.remove('hidden'));
+                if(closeSearchButton) {
+                    closeSearchButton.addEventListener('click', () => searchModal.classList.add('hidden'));
+                }
+                searchModal.addEventListener('click', (e) => {
+                    if(e.target === searchModal) {
+                        searchModal.classList.add('hidden');
+                    }
+                });
+            }
 
             // --- LOGIKA ANIMASI SCROLL ---
             function revealOnScroll() {
