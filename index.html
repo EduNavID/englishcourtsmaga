@@ -86,10 +86,26 @@
                     <a href="./kontak.html" class="text-slate-600 hover:text-blue-600 transition-colors">Kontak</a>
                 </nav>
 
-                <!-- Tombol Masuk -->
-                <a href="./login.html" class="bg-slate-100 text-slate-700 font-semibold px-6 py-2 rounded-lg hover:bg-slate-200 transition-colors shadow-sm border border-slate-200">
+                <!-- Tombol Masuk untuk Pengunjung (Default) -->
+                <a id="guest-login-button" href="./login.html" class="bg-slate-100 text-slate-700 font-semibold px-6 py-2 rounded-lg hover:bg-slate-200 transition-colors shadow-sm border border-slate-200">
                     Masuk
                 </a>
+                
+                <!-- Menu Profil untuk Anggota (Awalnya tersembunyi) -->
+                <div id="user-profile-area" class="relative hidden">
+                    <button id="profile-button" class="flex items-center gap-2 group">
+                        <div class="hidden sm:block text-right">
+                            <p class="font-semibold text-sm text-slate-700" id="user-email-display">Memuat...</p>
+                        </div>
+                        <img id="profile-avatar" src="https://placehold.co/40x40/dbeafe/4338ca?text=U" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-slate-200 group-hover:border-blue-400 transition object-cover">
+                    </button>
+                    <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-20 py-1">
+                        <a href="./profil.html" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">Profil Saya</a>
+                        <a href="./setting.html" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">Pengaturan</a>
+                        <div class="border-t border-slate-100 my-1"></div>
+                        <a href="#" id="logout-button" class="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -293,6 +309,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const SUPABASE_URL = 'https://jelcycdbdokcalsuptwm.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ1NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
+            const { createClient } = supabase;
+            const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
             // --- FUNGSI SLIDER UNIVERSAL ---
             function setupSlider(trackId, interval) {
                 const track = document.getElementById(trackId);
@@ -334,20 +355,64 @@
             // --- INISIALISASI SLIDER ---
             setupSlider('agenda-track', 6000);
 
+            // --- LOGIKA ADAPTIF HEADER ---
+            const userProfileArea = document.getElementById('user-profile-area');
+            const guestLoginButton = document.getElementById('guest-login-button');
+
+            async function checkUserSession() {
+                const { data } = await supabaseClient.auth.getSession();
+                if (data.session) {
+                    setupForMember(data.session.user);
+                } else {
+                    setupForGuest();
+                }
+            }
+
+            function setupForMember(user) {
+                guestLoginButton.classList.add('hidden');
+                userProfileArea.classList.remove('hidden');
+
+                const userEmailDisplay = document.getElementById('user-email-display');
+                const logoutButton = document.getElementById('logout-button');
+                const profileButton = document.getElementById('profile-button');
+                const profileDropdown = document.getElementById('profile-dropdown');
+                
+                userEmailDisplay.textContent = user.email;
+
+                logoutButton.addEventListener('click', async () => {
+                    await supabaseClient.auth.signOut();
+                    window.location.reload();
+                });
+
+                profileButton.addEventListener('click', () => profileDropdown.classList.toggle('hidden'));
+                window.addEventListener('click', (e) => {
+                    if (profileButton && !profileButton.contains(e.target) && profileDropdown && !profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            function setupForGuest() {
+                userProfileArea.classList.add('hidden');
+                guestLoginButton.classList.remove('hidden');
+            }
+            
+            checkUserSession();
+
             // --- LOGIKA ANIMASI SCROLL ---
             function revealOnScroll() {
                 const reveals = document.querySelectorAll('.reveal');
                 for (let i = 0; i < reveals.length; i++) {
                     const windowHeight = window.innerHeight;
                     const elementTop = reveals[i].getBoundingClientRect().top;
-                    const elementVisible = 100; // Adjust this value to change when the animation triggers
+                    const elementVisible = 100;
                     if (elementTop < windowHeight - elementVisible) {
                         reveals[i].classList.add('active');
                     }
                 }
             }
             window.addEventListener('scroll', revealOnScroll);
-            revealOnScroll(); // Trigger once on load
+            revealOnScroll();
         });
     </script>
 </body>
