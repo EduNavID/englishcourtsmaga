@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Pengguna - English Court</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display.swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="./index.html" class="flex items-center gap-3">
+                    <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-12 w-12">
+                    <div class="hidden sm:block">
+                        <p class="font-bold text-blue-700 text-lg">English Court</p>
+                        <p class="text-xs text-slate-500 -mt-1">SMAN 3 Lamongan</p>
+                    </div>
+                </a>
+                <a href="./index.html" class="font-semibold text-blue-600 hover:underline">Kembali ke Beranda</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 py-12">
+        <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
+            <div class="text-center">
+                <h1 class="text-3xl font-extrabold text-slate-800">Profil Saya</h1>
+                <p class="text-slate-500 mt-2">Perbarui informasi dan foto profil Anda di sini.</p>
+            </div>
+
+            <!-- Area Edit Profil -->
+            <div class="mt-10 flex flex-col items-center">
+                <!-- Tampilan Avatar -->
+                <div class="relative group">
+                    <img id="profile-image-display" src="https://placehold.co/128x128/dbeafe/4338ca?text=EC" alt="Foto Profil" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg">
+                    <label for="avatar-upload" class="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </label>
+                    <input type="file" id="avatar-upload" class="hidden" accept="image/png, image/jpeg">
+                </div>
+                
+                <!-- Informasi Pengguna -->
+                <p id="user-email-info" class="mt-4 text-xl font-semibold text-slate-700">memuat.email@anda.com</p>
+                <p class="text-slate-500">Anggota English Court</p>
+
+                <!-- Status Message -->
+                <div id="status-message" class="mt-6 text-center text-sm font-semibold"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const SUPABASE_URL = 'https://jelcycdbdokcalsuptwm.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ1NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
+            const { createClient } = supabase;
+            const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            // Elemen DOM
+            const profileImageDisplay = document.getElementById('profile-image-display');
+            const userEmailInfo = document.getElementById('user-email-info');
+            const avatarUploadInput = document.getElementById('avatar-upload');
+            const statusMessage = document.getElementById('status-message');
+            
+            let currentUser = null;
+
+            // --- FUNGSI UTAMA ---
+            async function initializePage() {
+                const { data: { session }, error } = await supabaseClient.auth.getSession();
+                if (error || !session) {
+                    alert('Anda harus login untuk mengakses halaman profil.');
+                    window.location.href = './login.html';
+                    return;
+                }
+                currentUser = session.user;
+                populateProfileData();
+                setupEventListeners();
+            }
+
+            // --- FUNGSI TAMPILAN (UI) ---
+            function populateProfileData() {
+                if (!currentUser) return;
+                userEmailInfo.textContent = currentUser.email;
+                // Cek jika user punya metadata dan avatar_url
+                if (currentUser.user_metadata && currentUser.user_metadata.avatar_url) {
+                    profileImageDisplay.src = currentUser.user_metadata.avatar_url;
+                } else {
+                    // Jika tidak ada, buat avatar dari inisial email
+                    const initial = currentUser.email.charAt(0).toUpperCase();
+                    profileImageDisplay.src = `https://placehold.co/128x128/dbeafe/4338ca?text=${initial}`;
+                }
+            }
+            
+            function showStatus(message, isError = false) {
+                statusMessage.textContent = message;
+                statusMessage.className = `mt-6 text-center text-sm font-semibold ${isError ? 'text-red-500' : 'text-green-500'}`;
+                setTimeout(() => {
+                    statusMessage.textContent = '';
+                }, 3000); // Pesan akan hilang setelah 3 detik
+            }
+
+            // --- LOGIKA UPLOAD & UPDATE ---
+            async function handleAvatarUpload(event) {
+                const file = event.target.files[0];
+                if (!file || !currentUser) return;
+
+                showStatus('Mengunggah foto...');
+                
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
+                const filePath = `${fileName}`;
+
+                try {
+                    // 1. Unggah file ke Supabase Storage
+                    const { error: uploadError } = await supabaseClient.storage
+                        .from('avatars') // Nama bucket yang sudah dibuat
+                        .upload(filePath, file, {
+                            cacheControl: '3600',
+                            upsert: true // Timpa file lama jika ada
+                        });
+                    
+                    if (uploadError) throw uploadError;
+
+                    // 2. Dapatkan URL publik dari file yang baru diunggah
+                    const { data: urlData } = supabaseClient.storage
+                        .from('avatars')
+                        .getPublicUrl(filePath);
+
+                    const publicURL = urlData.publicUrl;
+
+                    // 3. Update metadata pengguna dengan URL avatar baru
+                    const { data: updatedUser, error: updateError } = await supabaseClient.auth.updateUser({
+                        data: { avatar_url: publicURL }
+                    });
+
+                    if (updateError) throw updateError;
+
+                    // 4. Perbarui tampilan di halaman
+                    profileImageDisplay.src = publicURL;
+                    showStatus('Foto profil berhasil diperbarui!', false);
+
+                } catch (error) {
+                    console.error('Error uploading avatar:', error);
+                    showStatus(`Gagal: ${error.message}`, true);
+                } finally {
+                    avatarUploadInput.value = ''; // Reset input file
+                }
+            }
+
+            // --- EVENT LISTENERS ---
+            function setupEventListeners() {
+                avatarUploadInput.addEventListener('change', handleAvatarUpload);
+            }
+
+            // --- INISIALISASI HALAMAN ---
+            initializePage();
+        });
+    </script>
+</body>
+</html>
