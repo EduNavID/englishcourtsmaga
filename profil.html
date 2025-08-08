@@ -131,7 +131,7 @@
                 try {
                     // 1. Unggah file ke Supabase Storage
                     const { error: uploadError } = await supabaseClient.storage
-                        .from('avatars') // Nama bucket yang sudah dibuat
+                        .from('profil-user') // profil-user
                         .upload(filePath, file, {
                             cacheControl: '3600',
                             upsert: true // Timpa file lama jika ada
