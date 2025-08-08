@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - English Court</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display.swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .form-container.hidden { display: none; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .form-card {
+            animation: fadeIn 0.6s ease-in-out;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-slate-900">
+
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4">
+        
+        <!-- Kartu Login/Sign Up -->
+        <div class="w-full max-w-md form-card rounded-2xl shadow-2xl p-8">
+
+            <!-- Header Kartu -->
+            <div class="text-center mb-8">
+                <a href="./index.html" class="flex justify-center items-center gap-3 mb-4">
+                    <img src="https://i.imgur.com/vOlASeq.png" alt="Logo SMAN 3 Lamongan" class="h-14 w-14 bg-white/80 rounded-full p-1">
+                </a>
+                <h1 class="text-3xl font-bold text-white">English Court</h1>
+                <p class="text-white/70">SMAN 3 Lamongan</p>
+            </div>
+
+            <!-- Container Form Login -->
+            <div id="login-view" class="form-container">
+                <form id="login-form" class="space-y-5">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-white/80 mb-1">Email</label>
+                        <input id="login-email" type="email" required class="w-full px-4 py-3 bg-white/20 text-white placeholder-white/50 border border-white/30 rounded-lg focus:ring-2 focus:ring-white transition" placeholder="nama@email.com">
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-white/80 mb-1">Password</label>
+                        <input id="login-password" type="password" required class="w-full px-4 py-3 bg-white/20 text-white placeholder-white/50 border border-white/30 rounded-lg focus:ring-2 focus:ring-white transition" placeholder="••••••••">
+                    </div>
+                    <div id="login-error" class="hidden text-yellow-300 text-sm pt-1"></div>
+                    <button type="submit" class="w-full bg-white text-indigo-600 font-bold py-3 rounded-lg hover:bg-slate-200 transition-all shadow-lg transform hover:scale-105">Login</button>
+                </form>
+                <p class="text-center text-sm text-white/70 mt-6">
+                    Belum punya akun?
+                    <a href="#" id="show-signup-link" class="font-semibold text-white hover:underline">Daftar di sini</a>
+                </p>
+            </div>
+
+            <!-- Container Form Sign Up -->
+            <div id="signup-view" class="form-container hidden">
+                <form id="signup-form" class="space-y-5">
+                    <div>
+                        <label for="signup-email" class="block text-sm font-medium text-white/80 mb-1">Email</label>
+                        <input id="signup-email" type="email" required class="w-full px-4 py-3 bg-white/20 text-white placeholder-white/50 border border-white/30 rounded-lg focus:ring-2 focus:ring-white transition" placeholder="nama@email.com">
+                    </div>
+                    <div>
+                        <label for="signup-password" class="block text-sm font-medium text-white/80 mb-1">Password</label>
+                        <input id="signup-password" type="password" required class="w-full px-4 py-3 bg-white/20 text-white placeholder-white/50 border border-white/30 rounded-lg focus:ring-2 focus:ring-white transition" placeholder="Minimal 6 karakter">
+                    </div>
+                    <div id="signup-error" class="hidden text-yellow-300 text-sm pt-1"></div>
+                    <button type="submit" class="w-full bg-white text-indigo-600 font-bold py-3 rounded-lg hover:bg-slate-200 transition-all shadow-lg transform hover:scale-105">Create Account</button>
+                </form>
+                <p class="text-center text-sm text-white/70 mt-6">
+                    Sudah punya akun?
+                    <a href="#" id="show-login-link" class="font-semibold text-white hover:underline">Login di sini</a>
+                </p>
+            </div>
+
+             <!-- Container Notifikasi Verifikasi Email -->
+            <div id="verification-view" class="form-container hidden text-center">
+                <svg class="mx-auto h-16 w-16 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <h2 class="text-2xl font-bold text-white mt-4">Pendaftaran Berhasil!</h2>
+                <p class="text-white/80 mt-2">Satu langkah lagi. Kami telah mengirimkan link verifikasi ke email Anda. Silakan periksa kotak masuk dan klik link tersebut untuk mengaktifkan akun.</p>
+                <button id="back-to-login-button" class="mt-6 w-full bg-white/30 text-white font-bold py-3 rounded-lg hover:bg-white/40 transition-colors">Kembali ke Halaman Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const SUPABASE_URL = 'https://jelcycdbdokcalsuptwm.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ1NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
+            
+            const { createClient } = supabase;
+            const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const loginView = document.getElementById('login-view');
+            const signupView = document.getElementById('signup-view');
+            const verificationView = document.getElementById('verification-view');
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const showSignupLink = document.getElementById('show-signup-link');
+            const showLoginLink = document.getElementById('show-login-link');
+            const backToLoginButton = document.getElementById('back-to-login-button');
+            const loginErrorDiv = document.getElementById('login-error');
+            const signupErrorDiv = document.getElementById('signup-error');
+
+            function showView(viewToShow) {
+                loginView.classList.add('hidden');
+                signupView.classList.add('hidden');
+                verificationView.classList.add('hidden');
+                viewToShow.classList.remove('hidden');
+            }
+
+            showSignupLink.addEventListener('click', (e) => { e.preventDefault(); showView(signupView); });
+            showLoginLink.addEventListener('click', (e) => { e.preventDefault(); showView(loginView); });
+            backToLoginButton.addEventListener('click', (e) => { e.preventDefault(); showView(loginView); });
+
+            signupForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                signupErrorDiv.classList.add('hidden');
+
+                const { data, error } = await supabaseClient.auth.signUp({ email, password });
+
+                if (error) {
+                    signupErrorDiv.textContent = error.message;
+                    signupErrorDiv.classList.remove('hidden');
+                } else {
+                    showView(verificationView);
+                    signupForm.reset();
+                }
+            });
+
+            loginForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                loginErrorDiv.classList.add('hidden');
+
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+                if (error) {
+                    if (error.message.includes("Email not confirmed")) {
+                        loginErrorDiv.textContent = 'Akun Anda belum diverifikasi. Silakan cek email Anda.';
+                    } else {
+                        loginErrorDiv.textContent = 'Login gagal. Periksa kembali email dan password Anda.';
+                    }
+                    loginErrorDiv.classList.remove('hidden');
+                } else {
+                    window.location.href = './index.html'; 
+                }
+            });
+        });
+    </script>
+</body>
+</html>
