@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -378,14 +378,15 @@
             const userProfileArea = document.getElementById('user-profile-area');
             const guestLoginButton = document.getElementById('guest-login-button');
 
-            async function checkUserSession() {
-                const { data } = await supabaseClient.auth.getSession();
-                if (data.session) {
-                    setupForMember(data.session.user);
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+                if (session) {
+                    // Pengguna sudah login
+                    setupForMember(session.user);
                 } else {
+                    // Pengguna belum login
                     setupForGuest();
                 }
-            }
+            });
 
             function setupForMember(user) {
                 guestLoginButton.classList.add('hidden');
@@ -400,7 +401,7 @@
 
                 logoutButton.addEventListener('click', async () => {
                     await supabaseClient.auth.signOut();
-                    window.location.reload();
+                    // Tidak perlu reload, onAuthStateChange akan menangani
                 });
 
                 profileButton.addEventListener('click', () => profileDropdown.classList.toggle('hidden'));
@@ -415,8 +416,6 @@
                 userProfileArea.classList.add('hidden');
                 guestLoginButton.classList.remove('hidden');
             }
-            
-            checkUserSession();
 
             // --- LOGIKA MODAL PENCARIAN ---
             const searchButton = document.getElementById('search-button');
