@@ -12,45 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display.swap" rel="stylesheet">
     
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f4f8;
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
-        .hero-section {
-            background-color: #0093E9;
-            background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
-        }
-        .nav-icon-button {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .nav-icon-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-        }
-        .article-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .article-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-        }
-        .slider-container {
-            position: relative;
-            overflow: hidden;
-        }
-        .slider-track {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-        .slider-slide {
-            min-width: 100%;
-        }
-        @media (min-width: 768px) {
-            .slider-slide {
-                min-width: 50%;
-            }
-        }
-        /* Animasi Fade-in-up */
         .reveal {
             opacity: 0;
             transform: translateY(50px);
@@ -60,13 +28,38 @@
             opacity: 1;
             transform: translateY(0);
         }
-        /* Bubble Chat Style */
+        .nav-icon-button {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .nav-icon-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+        .slider-container { position: relative; overflow: hidden; }
+        .slider-track { display: flex; transition: transform 0.5s ease-in-out; }
+        .slider-slide { min-width: 100%; }
+        @media (min-width: 768px) {
+            .slider-slide {
+                min-width: 50%;
+            }
+        }
         .chat-bubble {
             animation: bounce 2s infinite ease-in-out;
         }
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
+        }
+        .modal-content {
+            animation: modal-in 0.3s ease-out forwards;
+        }
+        @keyframes modal-in {
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .hero-section {
+            background-color: #0093E9;
+            background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
         }
     </style>
 </head>
@@ -120,7 +113,7 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="hero-section text-white pt-10 pb-20 overflow-hidden">
+        <section class="hero-section text-white pt-10 pb-20 overflow-hidden h-[70vh] lg:h-[85vh] flex items-center">
             <div class="container mx-auto px-4 sm:px-6">
                 <div class="grid md:grid-cols-2 gap-8 items-center">
                     <!-- Kolom Kiri: Teks dan Pencarian -->
@@ -136,7 +129,7 @@
                         <p class="text-base italic opacity-90">"The limits of my language mean the limits of my world." - Ludwig Wittgenstein</p>
                     </div>
                     <!-- Kolom Kanan: Gambar -->
-                    <div class="hidden md:block relative h-full">
+                    <div class="hidden md:block relative h-full self-end">
                          <img src="https://i.imgur.com/G3Qk897.png" alt="Siswa Sekolah" class="absolute bottom-[-5rem] right-0 w-[450px] h-auto reveal">
                     </div>
                 </div>
@@ -321,7 +314,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const SUPABASE_URL = 'https://jelcycdbdokcalsuptwm.supabase.co';
-            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ1NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplbGN5Y2RiZG9rY2Fsc3VwdHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0OTM0NTUsImV4cCI6MjA3MDA2OTQ5NX0.tjgC8FKPb8L3T84V5EyRg5KSc23zr0Kcb0w5VsP4d6I';
             const { createClient } = supabase;
             const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -401,6 +394,24 @@
                 userProfileArea.classList.add('hidden');
                 guestLoginButton.classList.remove('hidden');
             }
+
+            // --- LOGIKA PENCARIAN ---
+            const searchInput = document.getElementById('search-input');
+            const searchSubmitButton = document.getElementById('search-submit-button');
+
+            function performSearch() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    window.location.href = `./search.html?q=${encodeURIComponent(searchTerm)}`;
+                }
+            }
+
+            searchInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            searchSubmitButton.addEventListener('click', performSearch);
 
             // --- LOGIKA ANIMASI SCROLL ---
             function revealOnScroll() {
